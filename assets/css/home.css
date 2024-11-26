@@ -183,26 +183,27 @@
   margin-top: 6rem;
 }
 /* about section end */
-/* shisha tasts section start */
-.ShishaTasts {
+
+/* Image tasts section start */
+.ImageTasts {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   padding: 3rem 0;
   overflow: hidden;
 }
-.ShishaTasts .card {
+.ImageTasts .card {
   border: 2px solid #0ef;
   overflow: hidden;
   position: relative;
   height: 30rem;
 }
-.ShishaTasts .card img {
+.ImageTasts .card img {
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: -1;
 }
-.ShishaTasts .card::before {
+.ImageTasts .card::before {
   content: "";
   position: absolute;
   top: 0;
@@ -215,14 +216,14 @@
   z-index: 1;
   transition: 0.4s ease-in-out;
 }
-.ShishaTasts .card:hover::before {
+.ImageTasts .card:hover::before {
   width: 100%;
 }
-.ShishaTasts .card:hover img {
+.ImageTasts .card:hover img {
   scale: 1.1;
   opacity: 0.7;
 }
-.ShishaTasts .card .text_content {
+.ImageTasts .card .text_content {
   position: absolute;
   top: 50%;
   left: 0;
@@ -243,15 +244,15 @@
   letter-spacing: 1.5px;
 }
 .card .text_content p {
-  color: #fff;
+  color: #ffffff;
   font-size: 17px;
   letter-spacing: 1px;
   line-height: 23px;
 }
-.ShishaTasts .card:hover .text_content {
+.ImageTasts .card:hover .text_content {
   transform: translateX(0);
 }
-/* shisha tasts section end */
+/* I tasts section end */
 
 /* service section start */
 .service_container {
@@ -312,15 +313,16 @@
   text-transform: uppercase;
 }
 /* service section end */
-/* reserve section start */
-.ReserveContainer {
+
+/* register section start */
+.RegisterContainer {
   background-image: url(/assets/images/r9e8gyer.png);
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
   background-attachment: fixed;
 }
-.reserve {
+.register {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -341,7 +343,7 @@
   z-index: -1;
   background-image: linear-gradient(180deg, #09090b 0%, #09090b 100%);
 }
-.reserve h3 {
+.register h3 {
   text-align: center;
   color: #30fdff;
   font-family: "Cherish", Sans-serif;
@@ -350,7 +352,7 @@
   line-height: 1.2em;
   z-index: 3;
 }
-.reserve h1 {
+.register h1 {
   text-align: center;
   color: white;
   font-family: "Montserrat Alternates", Sans-serif;
@@ -359,7 +361,7 @@
   line-height: 1.2em;
   letter-spacing: -1px;
 }
-.reserve span {
+.register span {
   text-align: center;
   color: #ffffff;
   font-family: "DM Sans", Sans-serif;
@@ -367,8 +369,9 @@
   font-weight: 400;
   line-height: 1.6em;
 }
-/* reserve section end */
-/* Restaurant menu section start */
+/* register section end */
+
+/* Rule section start */
 .rule_section {
   position: relative;
   overflow: hidden;
@@ -533,6 +536,7 @@
   background-color: #30fdff66;
 }
 /* blog section end */
+
 /* card section start */
 .ClientThink {
   display: flex;
@@ -652,6 +656,7 @@
   transform: translate(-8%, -6%);
 }
 /* card section end */
+
 /* open hours section start */
 .OpeningHours {
   background-image: url(/assets/images/r9e8gyer.png);
@@ -766,6 +771,7 @@
   color: #ffffff;
 }
 /* open hours section end */
+
 /* footer start */
 footer {
   border-top: 0.1px solid #272727;
@@ -872,7 +878,7 @@ footer p {
   .aboutCardContainer .content .btn {
     text-align: center;
   }
-  .ShishaTasts {
+  .ImageTasts {
     grid-template-columns: repeat(3, 1fr);
   }
   .CommentCardItem {
@@ -908,7 +914,7 @@ footer p {
   }
 }
 @media (max-width: 768px) {
-  .ShishaTasts {
+  .ImageTasts {
     grid-template-columns: repeat(2, 1fr);
   }
   .service_container {
@@ -969,19 +975,19 @@ footer p {
   }
 }
 @media (max-width: 576px) {
-  .ReserveContainer {
+  .RegisterContainer {
     margin: 5rem 0;
   }
-  .ShishaTasts {
+  .ImageTasts {
     grid-template-columns: repeat(1, 1fr);
   }
-  .reserve h3 {
+  .register h3 {
     font-size: 45px;
   }
-  .reserve h1 {
+  .register h1 {
     font-size: 65px;
   }
-  .reserve span {
+  .register span {
     font-size: 16px;
   }
   .blog_container {
