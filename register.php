@@ -37,7 +37,7 @@
             echo "<div class='message'>
                       <p>Registration successfully!</p>
                   </div> <br>";
-            echo "<a href='index.php'><button class='btn'>Login Now</button>";
+            echo "<a href='login.php'><button class='btn'>Login Now</button>";
          
 
          }
@@ -72,7 +72,7 @@
                     <input type="submit" class="btn" name="submit" value="Register" required>
                 </div>
                 <div class="links">
-                    Already a member? <a href="index.php">Sign In</a>
+                    Already a member? <a href="login.php">Sign In</a>
                 </div>
             </form>
         </div>
