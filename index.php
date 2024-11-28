@@ -6,20 +6,19 @@ if (isset($_POST['submit'])) {
 
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $number = $_POST['number'];
+    $time = $_POST['time']; // Updated to handle time input
     $date = $_POST['date'];
 
-    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, number, date) VALUES('$name','$email','$number','$date')") or die('query failed');
+    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date) VALUES('$name','$email','$time','$date')") or die('query failed');
 
     if ($insert) {
-        $message[] = 'appointment made successfully!';
+        $message[] = 'Appointment made successfully!';
     } else {
-        $message[] = 'appointment failed';
+        $message[] = 'Appointment failed';
     }
 
 }
 ?>
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -119,7 +118,6 @@ if (isset($_POST['submit'])) {
 <body>
 
     <!-- header section starts  -->
-
     <header class="header">
         <a href="#" class="logo">
             <img src="image/tarumt.png" alt="TARUMT Logo">
@@ -136,7 +134,6 @@ if (isset($_POST['submit'])) {
         </nav>
         <div id="menu-btn" class="fas fa-bars">☰</div>
     </header>
-
     <!-- header section ends -->
 
     <!-- home section starts  -->
@@ -406,12 +403,12 @@ if (isset($_POST['submit'])) {
                 }
                 ?>
 
-                <h3>make appointment</h3>
-                <input type="text" name="name" placeholder="your name" class="box">
-                <input type="number" name="number" placeholder="your number" class="box">
-                <input type="email" name="email" placeholder="your email" class="box">
-                <input type="date" name="date" class="box">
-                <input type="submit" name="submit" value="appointment now" class="btn">
+                <h3>Make Appointment</h3>
+                <input type="text" name="name" placeholder="Your name" class="box" required>
+                <input type="time" name="time" placeholder="Select time" class="box" required> <!-- Updated to time input -->
+                <input type="email" name="email" placeholder="Your email" class="box" required>
+                <input type="date" name="date" class="box" required>
+                <input type="submit" name="submit" value="Appointment Now" class="btn">
             </form>
         </div>
     </section>
@@ -571,7 +568,6 @@ if (isset($_POST['submit'])) {
 
     <!-- footer section starts  -->
     <section class="footer">
-
         <div class="box-container">
 
             <div class="box">
