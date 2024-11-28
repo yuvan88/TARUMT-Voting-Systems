@@ -1,22 +1,35 @@
 <?php
+session_start();  // Start the session to check user login status
 
-$conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('connection failed');
+// Database connection
+$conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connection failed');
+
+if (!isset($_SESSION['valid'])) {
+    echo '<p class="message">You must be logged in to make an appointment.</p>';
+    exit(); // Stop the script if the user is not logged in
+}
 
 if (isset($_POST['submit'])) {
 
+    // Collect form data and sanitize it
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $time = $_POST['time']; // Updated to handle time input
-    $date = $_POST['date'];
+    $time = $_POST['time'];  // Time input
+    $date = $_POST['date'];  // Date input
 
-    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date) VALUES('$name','$email','$time','$date')") or die('query failed');
+    // Get user ID from session to link with the appointment
+    $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
 
+    // Insert the appointment details into the contact_form table
+    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
+        VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
+
+    // Check if the appointment was successfully inserted
     if ($insert) {
         $message[] = 'Appointment made successfully!';
     } else {
-        $message[] = 'Appointment failed';
+        $message[] = 'Appointment failed.';
     }
-
 }
 ?>
 
@@ -383,19 +396,18 @@ if (isset($_POST['submit'])) {
     </section>
     <!-- staff section ends -->
 
-    <!-- appointmenting section starts   -->
+    <!-- Appointment Section -->
     <section class="appointment" id="appointment">
-
         <h1 class="heading"> <span>appointment</span> now </h1>
 
         <div class="row">
-
             <div class="image">
                 <img src="image/appointment.png" alt="">
             </div>
 
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <?php
+                // Display success or error message
                 if (isset($message)) {
                     foreach ($message as $message) {
                         echo '<p class ="message">' . $message . '</p>';
@@ -405,14 +417,14 @@ if (isset($_POST['submit'])) {
 
                 <h3>Make Appointment</h3>
                 <input type="text" name="name" placeholder="Your name" class="box" required>
-                <input type="time" name="time" placeholder="Select time" class="box" required> <!-- Updated to time input -->
                 <input type="email" name="email" placeholder="Your email" class="box" required>
+                <input type="time" name="time" class="box" required> <!-- Time input -->
                 <input type="date" name="date" class="box" required>
                 <input type="submit" name="submit" value="Appointment Now" class="btn">
             </form>
         </div>
     </section>
-    <!-- appointmenting section ends -->
+    <!-- Appointment Section Ends -->
 
     <!-- review section starts  -->
     <section class="review" id="review">
