@@ -36,7 +36,7 @@
          
                 }
                 if(isset($_SESSION['valid'])){
-                    header("Location: index.html");
+                    header("Location: index.php");
                 }
               }else{
 
