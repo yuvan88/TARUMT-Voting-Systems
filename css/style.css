@@ -225,13 +225,13 @@ section:nth-child(even){
 }
 
 
-.services .box-container{
+.rules .box-container{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(27rem, 1fr));
     gap:2rem;
 }
 
-.services .box-container .box{
+.rules .box-container .box{
     background:#fff;
     border-radius: .5rem;
     box-shadow: var(--box-shadow);
@@ -239,32 +239,32 @@ section:nth-child(even){
     padding: 2.5rem;
 }
 
-.services .box-container .box i{
+.rules .box-container .box i{
     color: var(--green);
     font-size: 5rem;
     padding-bottom: .5rem;
 }
 
-.services .box-container .box h3{
+.rules .box-container .box h3{
     color: var(--black);
     font-size: 2.5rem;
     padding:1rem 0;
 }
 
-.services .box-container .box p{
+.rules .box-container .box p{
     color: var(--light-color);
     font-size: 1.4rem;
     line-height: 2;
 }
 
 
-.doctors .box-container{
+.staffs .box-container{
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
     gap:2rem;
 }
 
-.doctors .box-container .box{
+.staffs .box-container .box{
     text-align: center;
     background:#fff;
     border-radius: .5rem;
@@ -273,7 +273,7 @@ section:nth-child(even){
     padding:2rem;
 }
 
-.doctors .box-container .box img{
+.staffs .box-container .box img{
     height: 20rem;
     border:var(--border);
     border-radius: .5rem;
@@ -281,21 +281,21 @@ section:nth-child(even){
     margin-bottom: 1rem;
 }
 
-.doctors .box-container .box h3{
+.staffs .box-container .box h3{
     color:var(--black);
     font-size: 2.5rem;
 }
 
-.doctors .box-container .box span{
+.staffs .box-container .box span{
     color:var(--green);
     font-size: 1.5rem;
 }
 
-.doctors .box-container .box .share{
+.staffs .box-container .box .share{
     padding-top: 2rem;
 }
 
-.doctors .box-container .box .share a{
+.staffs .box-container .box .share a{
     height: 5rem;
     width: 5rem;
     line-height: 4.5rem;
@@ -306,7 +306,7 @@ section:nth-child(even){
     margin:.3rem;
 }
 
-.doctors .box-container .box .share a:hover{
+.staffs .box-container .box .share a:hover{
     background:var(--green);
     color:#fff;
     box-shadow: var(--box-shadow);
