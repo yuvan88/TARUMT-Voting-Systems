@@ -6,7 +6,18 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Fetch user details
+    // Check if the login is for the admin user
+    if ($email == "admin" && $password == "admin") {
+        // Admin login, set session variables
+        $_SESSION['valid'] = "admin";
+        $_SESSION['username'] = "Admin";
+        $_SESSION['id'] = 1;  // Admin user ID (adjust based on your DB)
+        $_SESSION['is_admin'] = 1;  // Admin role
+        header("Location: admin/index.php");  // Redirect to admin page
+        exit();
+    }
+
+    // For regular user login, fetch user details
     $result = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
     $row = mysqli_fetch_assoc($result);
 
@@ -16,7 +27,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['username'] = $row['Username'];
         $_SESSION['age'] = $row['Age'];
         $_SESSION['id'] = $row['Id'];
-        header("Location: index.php");
+        header("Location: index.php");  // Redirect to user homepage
         exit();
     } else {
         echo "<div class='message'>
@@ -39,7 +50,8 @@ if (isset($_POST['submit'])) {
             <form method="POST">
                 <div class="field input">
                     <label>Email</label>
-                    <input type="email" name="email" required>
+                    <!-- Allow admin to use just 'admin' as email -->
+                    <input type="text" name="email" required>
                 </div>
                 <div class="field input">
                     <label>Password</label>
