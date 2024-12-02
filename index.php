@@ -50,6 +50,140 @@ if (isset($_POST['submit'])) {
 
 </head>
 <style>
+    /* open hours section start */
+    .OpeningHours {
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-attachment: fixed;
+        position: relative;
+        z-index: 1;
+        padding: 5rem 0;
+    }
+
+    .OpeningHours::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        opacity: 0.7;
+        z-index: -1;
+        background-image: linear-gradient(180deg, #09090b 0%, #09090b 100%);
+    }
+
+    .OpeningHours .title {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+        text-align: center;
+    }
+
+    .OpeningHours .title h3 {
+        color: #30fdff;
+        font-family: "Cherish", Sans-serif;
+        font-size: 52px;
+        font-weight: 400;
+        line-height: 1.2em;
+        margin: 0;
+    }
+
+    .OpeningHours .title span {
+        color: #ffffff;
+        font-family: "Montserrat Alternates", Sans-serif;
+        font-size: 30px;
+        font-weight: 500;
+        line-height: 1.2em;
+        letter-spacing: -1.5px;
+    }
+
+    .OpeningHours .title p {
+        color: #c6c6c6;
+        font-family: "DM Sans", Sans-serif;
+        font-size: 17px;
+        font-weight: 400;
+        line-height: 1.6em;
+    }
+
+    .OpeningHours .content {
+        display: flex;
+        align-items: flex-start;
+        justify-content: space-between;
+        gap: 3rem;
+        margin-top: 4rem;
+        flex-wrap: wrap;
+        padding: 0 2rem;
+    }
+
+    .OpeningHours .content .map {
+        position: relative;
+        flex: 1;
+        min-width: 300px;
+        height: 400px;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .OpeningHours .content .map iframe {
+        object-fit: cover;
+        opacity: 0.9;
+        min-width: 100%;
+        height: 100%;
+        border: none;
+        outline: none;
+    }
+
+    .content .hours {
+        flex: 1;
+        min-width: 300px;
+        background-color: rgba(0, 0, 0, 0.6);
+        border-radius: 8px;
+        padding: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        color: #ffffff;
+    }
+
+    .content .hours .title {
+        font-family: "Montserrat Alternates", Sans-serif;
+        font-size: 46px;
+        font-weight: 500;
+        line-height: 1.2em;
+        letter-spacing: 1px;
+        border-bottom: 1px solid #fff;
+        padding-bottom: 10px;
+    }
+
+    .content .hours ul {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .content .hours ul li {
+        display: flex;
+        justify-content: space-between;
+        font-family: "Work Sans", Sans-serif;
+        font-size: 18px;
+        font-weight: 400;
+    }
+
+    .content .hours ul li span {
+        color: #ffffff;
+    }
+
+    .content .hours ul li span:first-child {
+        font-weight: 500;
+    }
+
+    /* open hours section end */
+
     /* General Styles */
     body {
         margin: 0;
@@ -395,6 +529,63 @@ if (isset($_POST['submit'])) {
         </div>
     </section>
     <!-- staff section ends -->
+
+    <!-- open hours section start -->
+    <section class="OpeningHours container" id="contact"
+        style="background-image: url('image/voting1.jpg'); background-position: center; background-repeat: no-repeat; background-size: cover; background-attachment: fixed;">
+        <div class="title" data-aos="fade-down" data-aos-duration="1000">
+            <h3>Where to Find</h3>
+            <span>This is our TARUMT schedule</span>
+            <p>
+                Don’t miss out on this exotic fusion of cultures! The kitchen is
+                gorgeous in every way.
+            </p>
+        </div>
+        <div class="content">
+            <div class="map" data-aos="fade-right" data-aos-duration="1000">
+                <iframe
+                    src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3983.533208282092!2d101.72694637567588!3d3.2164337527339018!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc3869dfa52097%3A0xfebc5a5a82d3c9f6!2sTAR%20UMT%20Dewan%20Tunku%20Abdul%20Rahman%20(DTAR)!5e0!3m2!1sen!2smy!4v1733154403242!5m2!1sen!2smy"
+                    width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                    referrerpolicy="no-referrer-when-downgrade"></iframe>
+            </div>
+            <div class="hours">
+                <span class="title" data-aos="fade-right" data-aos-duration="1000">
+                    Opening Hours
+                </span>
+                <ul>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Monday</span>
+                        <span>CLOSED</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Tuesday</span>
+                        <span>CLOSED</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Wednesday</span>
+                        <span>08:00AM - 5:00PM</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Thursday</span>
+                        <span>CLOSED</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Friday</span>
+                        <span>CLOSED</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Saturday</span>
+                        <span>CLOSED</span>
+                    </li>
+                    <li data-aos="fade-right" data-aos-duration="1000">
+                        <span>Sunday</span>
+                        <span>CLOSED</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- open hours section start -->
 
     <!-- Appointment Section -->
     <section class="appointment" id="appointment">
