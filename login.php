@@ -6,63 +6,51 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Check if the user is admin
-    if ($email === 'admin' && $password === 'adminpassword') {
-        $_SESSION['valid'] = $email;
-        $_SESSION['username'] = 'admin';
-        $_SESSION['is_admin'] = true;
-        header("Location: admin/index.php"); // Redirect to admin page
+    // Fetch user details
+    $result = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
+    $row = mysqli_fetch_assoc($result);
+
+    if ($row && password_verify($password, $row['Password'])) {
+        // Start user session
+        $_SESSION['valid'] = $row['Email'];
+        $_SESSION['username'] = $row['Username'];
+        $_SESSION['age'] = $row['Age'];
+        $_SESSION['id'] = $row['Id'];
+        header("Location: index.php");
         exit();
     } else {
-        // Check in the users table for regular users
-        $result = mysqli_query($con, "SELECT * FROM users WHERE Email='$email' AND Password='$password'") or die("Select Error");
-        $row = mysqli_fetch_assoc($result);
-
-        if (is_array($row) && !empty($row)) {
-            $_SESSION['valid'] = $row['Email'];
-            $_SESSION['username'] = $row['Username'];
-            $_SESSION['age'] = $row['Age'];
-            $_SESSION['id'] = $row['Id'];
-            header("Location: index.php"); // Redirect to user page
-        } else {
-            echo "<div class='message'>
+        echo "<div class='message'>
                   <p>Wrong Username or Password</p>
-                  </div>";
-            echo "<a href='login.php'><button class='btn'>Go Back</button></a>";
-        }
+              </div>";
+        echo "<a href='login.php'><button class='btn'>Go Back</button></a>";
     }
 }
 ?>
-
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/style.css">
     <title>Login</title>
+    <link rel="stylesheet" href="style/style.css">
 </head>
 <body>
     <div class="container">
         <div class="box form-box">
             <header>Login</header>
-            <form action="" method="post">
+            <form method="POST">
                 <div class="field input">
-                    <label for="email">Email</label>
-                    <input type="text" name="email" id="email" autocomplete="off" required>
+                    <label>Email</label>
+                    <input type="email" name="email" required>
                 </div>
-
                 <div class="field input">
-                    <label for="password">Password</label>
-                    <input type="password" name="password" id="password" autocomplete="off" required>
+                    <label>Password</label>
+                    <input type="password" name="password" required>
                 </div>
-
                 <div class="field">
-                    <input type="submit" class="btn" name="submit" value="Login" required>
+                    <input type="submit" name="submit" value="Login" class="btn">
                 </div>
                 <div class="links">
-                    Don't have an account? <a href="register.php">Sign Up Now</a>
+                    <a href="forgot-password.php">Forgot Password?</a><br>
+                    Don't have an account? <a href="register.php">Register</a>
                 </div>
             </form>
         </div>

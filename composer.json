@@ -1,0 +1,10 @@
+{
+    "name": "pc/tarumt-voting-systems",
+    "description": "A voting system for student elections",
+    "type": "project",
+    "require": {
+        "phpmailer/phpmailer": "^6.9"
+    },
+    "license": "MIT",
+    "minimum-stability": "stable"
+}
