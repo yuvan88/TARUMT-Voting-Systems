@@ -5,30 +5,32 @@ session_start();  // Start the session to check user login status
 $conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connection failed');
 
 if (!isset($_SESSION['valid'])) {
-    echo '<p class="message">You must be logged in to make an appointment.</p>';
+    echo '<p class="message">You must be logged in to vote.</p>';
     exit(); // Stop the script if the user is not logged in
 }
 
-if (isset($_POST['submit'])) {
+// Fetch available timeslots for the logged-in user
+$user_id = $_SESSION['id'];
+$query = "SELECT * FROM contact_form WHERE user_id = $user_id";
+$result = mysqli_query($conn, $query);
+$bookings = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
-    // Collect form data and sanitize it
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $time = $_POST['time'];  // Time input
-    $date = $_POST['date'];  // Date input
+// Handle form submission for voting
+if (isset($_POST['submit_vote'])) {
 
-    // Get user ID from session to link with the appointment
-    $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
+    // Collect vote and booking time
+    $president = mysqli_real_escape_string($conn, $_POST['president']);
+    $booking_time = mysqli_real_escape_string($conn, $_POST['booking_time']);
+    
+    // Insert the vote into the database
+    $insert = mysqli_query($conn, "INSERT INTO votes (user_id, president, booking_time) 
+        VALUES('$user_id', '$president', '$booking_time')") or die('Query failed');
 
-    // Insert the appointment details into the contact_form table
-    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
-        VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
-
-    // Check if the appointment was successfully inserted
+    // Check if the vote was successfully inserted
     if ($insert) {
-        $message[] = 'Appointment made successfully!';
+        $message[] = 'Your vote has been successfully cast!';
     } else {
-        $message[] = 'Appointment failed.';
+        $message[] = 'Failed to cast your vote.';
     }
 }
 ?>
@@ -42,15 +44,14 @@ if (isset($_POST['submit'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARUMT Voting System</title>
 
-    <!-- font awesome cdn link  -->
+    <!-- Font Awesome CDN link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
-    <!-- custom css file link  -->
+    <!-- Custom CSS file link -->
     <link rel="stylesheet" href="css/style.css">
 
-</head>
-<style>
-    /* open hours section start */
+    <style>
+        /* open hours section start */
     .OpeningHours {
         background-position: center;
         background-repeat: no-repeat;
@@ -260,11 +261,56 @@ if (isset($_POST['submit'])) {
             display: block;
         }
     }
-</style>
+        .message {
+            color: red;
+            font-size: 18px;
+        }
+
+        .btn {
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+        }
+
+        .vote-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+        }
+
+        .vote-section h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .vote-options {
+            margin-bottom: 20px;
+        }
+
+        .vote-options input {
+            margin-right: 10px;
+        }
+
+        .booking-time select {
+            padding: 5px 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+    </style>
+
+</head>
 
 <body>
 
-    <!-- header section starts  -->
+    <!-- header section starts -->
     <header class="header">
         <a href="#" class="logo">
             <img src="image/tarumt.png" alt="TARUMT Logo">
@@ -274,88 +320,75 @@ if (isset($_POST['submit'])) {
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
-            <a href="#appointment">Appointment</a>
             <a href="voter.php">Voter</a>
-            <a href="#review">Review</a>
-            <a href="#blogs">Blogs</a>
             <a href="register.php">Logout</a>
         </nav>
-        <div id="menu-btn" class="fas fa-bars">☰</div>
     </header>
     <!-- header section ends -->
 
-    <!-- home section starts  -->
-    <section class="home" id="home">
+    <!-- voter section starts -->
+    <section class="vote-section">
+        <h3>Vote for the Malaysia Student President</h3>
 
-        <div class="image">
-            <img src="image/voting1.png" alt="">
-        </div>
+        <?php
+        if (isset($message)) {
+            foreach ($message as $msg) {
+                echo "<p class='message'>$msg</p>";
+            }
+        }
+        ?>
 
-        <div class="content">
-            <h3>TARUMT Voting System</h3>
-            <p> The TARUMT Voting System is designed to empower students to elect the next Malaysia President using a
-                secure, efficient, and transparent voting process. </p>
-            <a href="#appointment" class="btn"> Appointment us <span class="fas fa-chevron-right"></span> </a>
-        </div>
+        <form action="voter.php" method="POST">
+            <!-- Vote options -->
+            <div class="vote-options">
+                <h4>Select your President:</h4>
+                <label>
+                    <input type="radio" name="president" value="President 1" required> President 1
+                </label><br>
+                <label>
+                    <input type="radio" name="president" value="President 2" required> President 2
+                </label><br>
+                <label>
+                    <input type="radio" name="president" value="President 3" required> President 3
+                </label>
+            </div>
 
+            <!-- Available booking time -->
+            <div class="booking-time">
+                <h4>Select your Booking Time:</h4>
+                <select name="booking_time" required>
+                    <option value="">Select a time</option>
+                    <?php
+                    // Display available booking times for the logged-in user
+                    foreach ($bookings as $booking) {
+                        echo "<option value='{$booking['time']}'>Time: {$booking['time']}</option>";
+                    }
+                    ?>
+                </select>
+            </div>
+
+            <div class="field">
+                <input type="submit" name="submit_vote" value="Cast Vote" class="btn">
+            </div>
+        </form>
     </section>
-    <!-- home section ends -->
+    <!-- voter section ends -->
 
-    <!-- footer section starts  -->
+    <!-- footer section starts -->
     <section class="footer">
         <div class="box-container">
-
             <div class="box">
                 <h3>quick links</h3>
                 <a href="#home"> <i class="fas fa-chevron-right"></i> home </a>
                 <a href="#about"> <i class="fas fa-chevron-right"></i> about </a>
                 <a href="#rules"> <i class="fas fa-chevron-right"></i> rule </a>
-                <a href="#staffs"> <i class="fas fa-chevron-right"></i> staffs </a>
-                <a href="#appointment"> <i class="fas fa-chevron-right"></i> appointment </a>
-                <a href="#review"> <i class="fas fa-chevron-right"></i> review </a>
-                <a href="#blogs"> <i class="fas fa-chevron-right"></i> blogs </a>
-            </div>
-
-            <div class="box">
-                <h3>our services</h3>
-                <a href="#"> <i class="fas fa-chevron-right"></i> dental care </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> message therapy </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> cardioloty </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> diagnosis </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> ambulance service </a>
-            </div>
-
-            <div class="box">
-                <h3>appointment info</h3>
-                <a href="#"> <i class="fas fa-phone"></i> +8801688238801 </a>
-                <a href="#"> <i class="fas fa-phone"></i> +8801782546978 </a>
-                <a href="#"> <i class="fas fa-envelope"></i> wincoder9@gmail.com </a>
-                <a href="#"> <i class="fas fa-envelope"></i> sujoncse26@gmail.com </a>
-                <a href="#"> <i class="fas fa-map-marker-alt"></i> sylhet, bangladesh </a>
-            </div>
-
-            <div class="box">
-                <h3>follow us</h3>
-                <a href="#"> <i class="fab fa-faceappointment-f"></i> faceappointment </a>
-                <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
-                <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
-                <a href="#"> <i class="fab fa-instagram"></i> instagram </a>
-                <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
-                <a href="#"> <i class="fab fa-pinterest"></i> pinterest </a>
             </div>
         </div>
-        <div class="credit"> created by <span>win coder</span> | all rights reserved </div>
     </section>
     <!-- footer section ends -->
 
-
-    <!-- js file link  -->
+    <!-- JS file link -->
     <script src="js/script.js"></script>
-    <script>
-    .navbar a:hover {
-            color: #007BFF; /* Change color on hover */
-        }
-    </script>
 
 </body>
 
