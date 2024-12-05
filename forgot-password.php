@@ -45,7 +45,7 @@ if (isset($_POST['submit'])) {
             $mail->Body = 'Click the following link to reset your password: <a href="http://localhost/TARUMT-Voting-Systems/reset-password.php?token=' . $token . '">Reset Password</a>';
 
             $mail->send();
-            echo "Password reset link has been sent to your email.";
+            echo "Password reset link has been sent to your email. Now go back to login page";
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
@@ -74,10 +74,34 @@ if (isset($_POST['submit'])) {
                 </div>
 
                 <div class="field">
-                    <input type="submit" class="btn" name="submit" value="Send Reset Link" required>
+                    <input type="submit" class="btn" name="submit" value="Send Reset Link">
                 </div>
             </form>
+            <div class="field">
+                <!-- Added login button -->
+                <a href="login.php" class="btn login-btn">Back to Login</a>
+            </div>
         </div>
     </div>
+
+    <style>
+        /* Additional CSS to style the login button */
+        .login-btn {
+            display: block;
+            text-align: center;
+            margin-top: 10px;
+            background-color: #007bff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .login-btn:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </body>
 </html>
+
