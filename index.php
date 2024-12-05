@@ -10,36 +10,45 @@ if (!isset($_SESSION['valid'])) {
 }
 
 if (isset($_POST['submit'])) {
-
     // Collect form data and sanitize it
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $time = $_POST['time'];  // Time input
     $date = $_POST['date'];  // Date input
 
-    // Get the current date
-    $today = date('Y-m-d'); // Format today's date as Y-m-d
+    // Get user ID from session to link with the appointment
+    $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
 
-    // Check if the selected date is in the past
-    if ($date < $today) {
-        $message[] = 'You cannot book an appointment for a past date.';
+    // Check if the user already has an appointment
+    $check_appointment = mysqli_query($conn, "SELECT * FROM `contact_form` WHERE `user_id` = '$user_id'") or die('Query failed');
+
+    if (mysqli_num_rows($check_appointment) > 0) {
+        // If user already has an appointment, show error message
+        $message[] = 'You have already made an appointment!';
     } else {
-        // Get user ID from session to link with the appointment
-        $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
+        // Get the current date
+        $today = date('Y-m-d'); // Format today's date as Y-m-d
 
-        // Insert the appointment details into the contact_form table
-        $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
-            VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
-
-        // Check if the appointment was successfully inserted
-        if ($insert) {
-            $message[] = 'Appointment made successfully!';
+        // Check if the selected date is in the past
+        if ($date < $today) {
+            $message[] = 'You cannot book an appointment for a past date.';
         } else {
-            $message[] = 'Appointment failed.';
+            // Insert the appointment details into the contact_form table
+            $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
+                VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
+
+            // Check if the appointment was successfully inserted
+            if ($insert) {
+                $message[] = 'Appointment made successfully!';
+            } else {
+                $message[] = 'Appointment failed.';
+            }
         }
     }
 }
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -58,6 +67,12 @@ if (isset($_POST['submit'])) {
 
 </head>
 <style>
+    .message {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
     /* open hours section start */
     .OpeningHours {
         background-position: center;
@@ -607,10 +622,11 @@ if (isset($_POST['submit'])) {
 
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <?php
-                // Display success or error message
-                if (isset($message)) {
-                    foreach ($message as $message) {
-                        echo '<p class="message">' . $message . '</p>';
+                // Check if there are any messages in the $message array
+                if (isset($message) && !empty($message)) {
+                    // Loop through and display each message
+                    foreach ($message as $msg) {
+                        echo '<p class="message" style="color: red;">' . $msg . '</p>';
                     }
                 }
                 ?>
