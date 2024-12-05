@@ -17,18 +17,26 @@ if (isset($_POST['submit'])) {
     $time = $_POST['time'];  // Time input
     $date = $_POST['date'];  // Date input
 
-    // Get user ID from session to link with the appointment
-    $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
+    // Get the current date
+    $today = date('Y-m-d'); // Format today's date as Y-m-d
 
-    // Insert the appointment details into the contact_form table
-    $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
-        VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
-
-    // Check if the appointment was successfully inserted
-    if ($insert) {
-        $message[] = 'Appointment made successfully!';
+    // Check if the selected date is in the past
+    if ($date < $today) {
+        $message[] = 'You cannot book an appointment for a past date.';
     } else {
-        $message[] = 'Appointment failed.';
+        // Get user ID from session to link with the appointment
+        $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
+
+        // Insert the appointment details into the contact_form table
+        $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
+            VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
+
+        // Check if the appointment was successfully inserted
+        if ($insert) {
+            $message[] = 'Appointment made successfully!';
+        } else {
+            $message[] = 'Appointment failed.';
+        }
     }
 }
 ?>
@@ -602,7 +610,7 @@ if (isset($_POST['submit'])) {
                 // Display success or error message
                 if (isset($message)) {
                     foreach ($message as $message) {
-                        echo '<p class ="message">' . $message . '</p>';
+                        echo '<p class="message">' . $message . '</p>';
                     }
                 }
                 ?>
@@ -610,8 +618,12 @@ if (isset($_POST['submit'])) {
                 <h3>Make Appointment</h3>
                 <input type="text" name="name" placeholder="Your name" class="box" required>
                 <input type="email" name="email" placeholder="Your email" class="box" required>
-                <input type="time" name="time" class="box" required> <!-- Time input -->
-                <input type="date" name="date" class="box" required>
+
+                <!-- Time input field with min and max values set -->
+                <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
+
+                <!-- Date input field with min value set to today -->
+                <input type="date" name="date" class="box" required id="dateInput">
                 <input type="submit" name="submit" value="Appointment Now" class="btn">
             </form>
         </div>
@@ -821,9 +833,39 @@ if (isset($_POST['submit'])) {
     <!-- js file link  -->
     <script src="js/script.js"></script>
     <script>
-    .navbar a:hover {
-            color: #007BFF; /* Change color on hover */
-        }
+        // Disable past dates in the date input field
+        document.addEventListener('DOMContentLoaded', function () {
+            var dateInput = document.getElementById('dateInput');
+            var today = new Date();
+
+            // Format the date to YYYY-MM-DD
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1; // Months are zero-based
+            var yyyy = today.getFullYear();
+
+            // Add leading zero to day and month if necessary
+            if (dd < 10) dd = '0' + dd;
+            if (mm < 10) mm = '0' + mm;
+
+            // Today's date in YYYY-MM-DD format
+            var todayFormatted = yyyy + '-' + mm + '-' + dd;
+
+            // Set the 'min' attribute of the date input to today's date
+            dateInput.setAttribute('min', todayFormatted);
+        });
+
+        // JavaScript to ensure time selection is within the range
+        document.getElementById('time').addEventListener('input', function () {
+            const time = this.value;
+            const minTime = '08:00';
+            const maxTime = '17:00';
+
+            // If the selected time is outside the range, reset the value to the last valid time
+            if (time < minTime || time > maxTime) {
+                alert("Please select a time between 08:00 AM and 05:00 PM.");
+                this.value = '';  // Reset the time field
+            }
+        });
     </script>
 
 </body>
