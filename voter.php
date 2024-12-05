@@ -4,24 +4,38 @@ session_start();  // Start the session to check user login status
 // Database connection
 $conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connection failed');
 
+// Check if the user is logged in
 if (!isset($_SESSION['valid'])) {
     echo '<p class="message">You must be logged in to vote.</p>';
     exit(); // Stop the script if the user is not logged in
 }
 
-// Fetch available timeslots for the logged-in user
+// Check if the user has already voted
 $user_id = $_SESSION['id'];
+$query = "SELECT * FROM votes WHERE user_id = $user_id";
+$result = mysqli_query($conn, $query);
+$existing_vote = mysqli_fetch_assoc($result);
+
+if ($existing_vote) {
+    // If the user has already voted, show an alert and redirect after they click OK
+    echo '<script>
+            alert("You have already cast your vote. You cannot vote more than once.");
+            window.location.href = "index.php";
+          </script>';
+    exit(); // Stop the script to prevent further actions
+}
+
+// Fetch available timeslots for the logged-in user
 $query = "SELECT * FROM contact_form WHERE user_id = $user_id";
 $result = mysqli_query($conn, $query);
 $bookings = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
 // Handle form submission for voting
 if (isset($_POST['submit_vote'])) {
-
     // Collect vote and booking time
     $president = mysqli_real_escape_string($conn, $_POST['president']);
     $booking_time = mysqli_real_escape_string($conn, $_POST['booking_time']);
-    
+
     // Insert the vote into the database
     $insert = mysqli_query($conn, "INSERT INTO votes (user_id, president, booking_time) 
         VALUES('$user_id', '$president', '$booking_time')") or die('Query failed');
@@ -51,266 +65,199 @@ if (isset($_POST['submit_vote'])) {
     <link rel="stylesheet" href="css/style.css">
 
     <style>
-        /* open hours section start */
-    .OpeningHours {
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: cover;
-        background-attachment: fixed;
-        position: relative;
-        z-index: 1;
-        padding: 5rem 0;
-    }
-
-    .OpeningHours::before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        opacity: 0.7;
-        z-index: -1;
-        background-image: linear-gradient(180deg, #09090b 0%, #09090b 100%);
-    }
-
-    .OpeningHours .title {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 15px;
-        text-align: center;
-    }
-
-    .OpeningHours .title h3 {
-        color: #30fdff;
-        font-family: "Cherish", Sans-serif;
-        font-size: 52px;
-        font-weight: 400;
-        line-height: 1.2em;
-        margin: 0;
-    }
-
-    .OpeningHours .title span {
-        color: #ffffff;
-        font-family: "Montserrat Alternates", Sans-serif;
-        font-size: 30px;
-        font-weight: 500;
-        line-height: 1.2em;
-        letter-spacing: -1.5px;
-    }
-
-    .OpeningHours .title p {
-        color: #c6c6c6;
-        font-family: "DM Sans", Sans-serif;
-        font-size: 17px;
-        font-weight: 400;
-        line-height: 1.6em;
-    }
-
-    .OpeningHours .content {
-        display: flex;
-        align-items: flex-start;
-        justify-content: space-between;
-        gap: 3rem;
-        margin-top: 4rem;
-        flex-wrap: wrap;
-        padding: 0 2rem;
-    }
-
-    .OpeningHours .content .map {
-        position: relative;
-        flex: 1;
-        min-width: 300px;
-        height: 400px;
-        border-radius: 8px;
-        overflow: hidden;
-    }
-
-    .OpeningHours .content .map iframe {
-        object-fit: cover;
-        opacity: 0.9;
-        min-width: 100%;
-        height: 100%;
-        border: none;
-        outline: none;
-    }
-
-    .content .hours {
-        flex: 1;
-        min-width: 300px;
-        background-color: rgba(0, 0, 0, 0.6);
-        border-radius: 8px;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 20px;
-        color: #ffffff;
-    }
-
-    .content .hours .title {
-        font-family: "Montserrat Alternates", Sans-serif;
-        font-size: 46px;
-        font-weight: 500;
-        line-height: 1.2em;
-        letter-spacing: 1px;
-        border-bottom: 1px solid #fff;
-        padding-bottom: 10px;
-    }
-
-    .content .hours ul {
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        gap: 1.5rem;
-    }
-
-    .content .hours ul li {
-        display: flex;
-        justify-content: space-between;
-        font-family: "Work Sans", Sans-serif;
-        font-size: 18px;
-        font-weight: 400;
-    }
-
-    .content .hours ul li span {
-        color: #ffffff;
-    }
-
-    .content .hours ul li span:first-child {
-        font-weight: 500;
-    }
-
-    /* open hours section end */
-
-    /* General Styles */
-    body {
-        margin: 0;
-        font-family: Arial, sans-serif;
-    }
-
-    /* Header Styling */
-    .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        background-color: lightblue;
-        /* Turquoise background */
-        padding: 10px 20px;
-        position: fixed;
-        width: 100%;
-        top: 0;
-        z-index: 1000;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-    }
-
-    .logo img {
-        width: 200px;
-        max-width: 100%;
-        height: auto;
-    }
-
-    /* Navbar Styling */
-    .navbar {
-        display: flex;
-        list-style: none;
-    }
-
-    .navbar a {
-        text-decoration: none;
-        color: black;
-        margin: 0 15px;
-        font-size: 1rem;
-        line-height: 50px;
-        /* Center items vertically */
-        transition: color 0.3s;
-    }
-
-    .navbar a:hover {
-        color: #007BFF;
-        /* Blue on hover */
-    }
-
-    /* Mobile Menu Button */
-    #menu-btn {
-        display: none;
-        font-size: 24px;
-        cursor: pointer;
-    }
-
-    /* Responsive Design */
-    @media screen and (max-width: 768px) {
-        .navbar {
-            display: none;
-            flex-direction: column;
-            background-color: #40e0d0;
-            position: absolute;
-            top: 60px;
-            right: 0;
-            width: 100%;
-            text-align: center;
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            padding-top: 80px;
+            /* Added padding to prevent header overlap */
         }
 
-        .navbar.active {
+        /* Header Styling */
+        .header {
             display: flex;
-        }
-
-        #menu-btn {
-            display: block;
-        }
-    }
-        .message {
-            color: red;
-            font-size: 18px;
-        }
-
-        .btn {
-            background-color: #007BFF;
-            color: white;
+            justify-content: space-between;
+            align-items: center;
+            background-color: lightblue;
             padding: 10px 20px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo img {
+            width: 200px;
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar a {
             text-decoration: none;
-            border-radius: 5px;
-            cursor: pointer;
+            color: black;
+            margin: 0 15px;
+            font-size: 1rem;
+            line-height: 50px;
+            transition: color 0.3s;
         }
 
-        .btn:hover {
-            background-color: #0056b3;
+        .navbar a:hover {
+            color: #007BFF;
         }
 
+        /* Vote Section */
         .vote-section {
-            margin: 30px 0;
-            padding: 20px;
-            background-color: #f9f9f9;
-            border-radius: 10px;
+            padding: 80px 20px 20px;
         }
 
         .vote-section h3 {
+            text-align: center;
             font-size: 24px;
             margin-bottom: 20px;
         }
 
-        .vote-options {
-            margin-bottom: 20px;
+        .message {
+            text-align: center;
+            color: red;
+            font-size: 18px;
+            margin: 20px 0;
         }
 
-        .vote-options input {
-            margin-right: 10px;
+        .vote-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            /* Increased gap for better spacing between cards */
+            margin: 0 auto;
         }
 
-        .booking-time select {
-            padding: 5px 10px;
+
+        .vote-card {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 280px;
+            /* Keep this width or adjust for uniformity */
+            height: 350px;
+            /* Set a fixed height for uniformity */
+            text-align: center;
+            padding: 20px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            /* Ensures contents are evenly spaced */
+        }
+
+        .vote-card img {
+            width: 100%;
+            height: 150px;
+            /* Fixed height to ensure uniformity */
+            object-fit: cover;
+            /* Ensures images fit the box without stretching */
+            border-radius: 10px;
+        }
+
+        .vote-card h4 {
+            font-size: 20px;
+            margin: 15px 0;
+        }
+
+        .vote-card p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .vote-card input {
+            margin-top: 10px;
+            transform: scale(1.2);
+            cursor: pointer;
+        }
+
+        .vote-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+
+
+        .booking-time {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .booking-time select,
+        .btn {
+            width: 100%;
+            max-width: 300px;
+            margin: 10px auto;
+            padding: 10px;
             font-size: 16px;
-            margin-bottom: 20px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+
+        .btn {
+            display: block;
+            background-color: #007BFF;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+            font-size: 16px;
+            margin: 20px auto;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #0056b3;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Error Message Styles */
+        .error-message {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            margin: 20px auto;
+            text-align: center;
+            border-radius: 5px;
+            width: 80%;
+            max-width: 600px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+
+        @media (max-width: 768px) {
+            .vote-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .vote-card {
+                width: 90%;
+            }
         }
     </style>
-
 </head>
 
 <body>
 
-    <!-- header section starts -->
+    <!-- header section starts  -->
     <header class="header">
         <a href="#" class="logo">
             <img src="image/tarumt.png" alt="TARUMT Logo">
@@ -320,13 +267,17 @@ if (isset($_POST['submit_vote'])) {
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
+            <a href="#appointment">Appointment</a>
             <a href="voter.php">Voter</a>
+            <a href="#review">Review</a>
+            <a href="#blogs">Blogs</a>
             <a href="register.php">Logout</a>
         </nav>
+        <div id="menu-btn" class="fas fa-bars">☰</div>
     </header>
     <!-- header section ends -->
 
-    <!-- voter section starts -->
+    <!-- Voting Section -->
     <section class="vote-section">
         <h3>Vote for the Malaysia Student President</h3>
 
@@ -339,27 +290,44 @@ if (isset($_POST['submit_vote'])) {
         ?>
 
         <form action="voter.php" method="POST">
-            <!-- Vote options -->
-            <div class="vote-options">
-                <h4>Select your President:</h4>
-                <label>
-                    <input type="radio" name="president" value="President 1" required> President 1
-                </label><br>
-                <label>
-                    <input type="radio" name="president" value="President 2" required> President 2
-                </label><br>
-                <label>
-                    <input type="radio" name="president" value="President 3" required> President 3
-                </label>
+            <div class="vote-container">
+                <!-- President 1 -->
+                <div class="vote-card">
+                    <img src="image/vote1.png" alt="President 1">
+                    <h4>President 1</h4>
+                    <p>Brief description about President 1's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 1" required> Select
+                    </label>
+                </div>
+
+                <!-- President 2 -->
+                <div class="vote-card">
+                    <img src="image/vote2.png" alt="President 2">
+                    <h4>President 2</h4>
+                    <p>Brief description about President 2's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 2" required> Select
+                    </label>
+                </div>
+
+                <!-- President 3 -->
+                <div class="vote-card">
+                    <img src="image/vote3.png" alt="President 3">
+                    <h4>President 3</h4>
+                    <p>Brief description about President 3's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 3" required> Select
+                    </label>
+                </div>
             </div>
 
-            <!-- Available booking time -->
+            <!-- Booking Time -->
             <div class="booking-time">
                 <h4>Select your Booking Time:</h4>
                 <select name="booking_time" required>
                     <option value="">Select a time</option>
                     <?php
-                    // Display available booking times for the logged-in user
                     foreach ($bookings as $booking) {
                         echo "<option value='{$booking['time']}'>Time: {$booking['time']}</option>";
                     }
@@ -367,28 +335,9 @@ if (isset($_POST['submit_vote'])) {
                 </select>
             </div>
 
-            <div class="field">
-                <input type="submit" name="submit_vote" value="Cast Vote" class="btn">
-            </div>
+            <button type="submit" name="submit_vote" class="btn">Cast Vote</button>
         </form>
     </section>
-    <!-- voter section ends -->
-
-    <!-- footer section starts -->
-    <section class="footer">
-        <div class="box-container">
-            <div class="box">
-                <h3>quick links</h3>
-                <a href="#home"> <i class="fas fa-chevron-right"></i> home </a>
-                <a href="#about"> <i class="fas fa-chevron-right"></i> about </a>
-                <a href="#rules"> <i class="fas fa-chevron-right"></i> rule </a>
-            </div>
-        </div>
-    </section>
-    <!-- footer section ends -->
-
-    <!-- JS file link -->
-    <script src="js/script.js"></script>
 
 </body>
 
