@@ -24,7 +24,7 @@ if (isset($_POST['submit'])) {
             echo "<div class='message'>
                       <p>Registration successful!</p>
                   </div>";
-            echo "<a href='login.php'><button class='btn'>Login Now</button></a>";
+            // echo "<a href='login.php'><button class='btn'>Login Now</button></a>";
         } else {
             echo "<div class='message'>
                       <p>Registration failed. Please try again later.</p>
