@@ -294,7 +294,7 @@ if (isset($_POST['submit'])) {
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
-            <a href="#appointment">Appointment</a>
+            <a href="appointment.php">Appointment</a>
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
@@ -577,35 +577,7 @@ if (isset($_POST['submit'])) {
     <!-- open hours section start -->
 
     <!-- Appointment Section -->
-    <section class="appointment" id="appointment">
-        <h1 class="heading"> <span>appointment</span> now </h1>
-        <div class="row">
-            <div class="image">
-                <img src="image/appoint.png" alt="">
-            </div>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <?php
-                // Check if there are any messages in the $message array
-                if (isset($message) && !empty($message)) {
-                    // Loop through and display each message
-                    foreach ($message as $msg) {
-                        echo '<p class="message" style="color: red;">' . $msg . '</p>';
-                    }
-                }
-                ?>
-                <h3>Make Appointment</h3>
-                <input type="text" name="name" placeholder="Your name" class="box" required>
-                <input type="email" name="email" placeholder="Your email" class="box" required>
-
-                <!-- Time input field with min and max values set -->
-                <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
-
-                <!-- Date input field with min value set to today -->
-                <input type="date" name="date" class="box" required id="dateInput">
-                <input type="submit" name="submit" value="Appointment Now" class="btn">
-            </form>
-        </div>
-    </section>
+.....................
     <!-- Appointment Section Ends -->
 
     <!-- review section starts  -->

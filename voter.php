@@ -263,7 +263,7 @@ if (isset($_POST['submit_vote'])) {
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
-            <a href="#appointment">Appointment</a>
+            <a href="appointment.php">Appointment</a>
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
