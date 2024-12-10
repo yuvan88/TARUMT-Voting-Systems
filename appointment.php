@@ -1,49 +1,68 @@
 <?php
-session_start();  // Start the session to check user login status
+session_start();
+include('php/config.php');  // Ensure this path is correct
 
-// Database connection
-$conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connection failed');
+// Initialize message variable for error or success
+$message = array();
 
+// Check if the user is logged in
 if (!isset($_SESSION['valid'])) {
-    echo '<p class="message">You must be logged in to make an appointment.</p>';
-    exit(); // Stop the script if the user is not logged in
+    $message[] = "You need to log in to schedule an appointment.";
 }
 
-if (isset($_POST['submit'])) {
-    // Collect form data and sanitize it
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
-    $time = $_POST['time'];  // Time input
-    $date = $_POST['date'];  // Date input
+// Check if the form is submitted
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $appointment_date = mysqli_real_escape_string($con, $_POST['date']);
+    $appointment_time = mysqli_real_escape_string($con, $_POST['time']);
+    $user_name = mysqli_real_escape_string($con, $_POST['name']);
+    $user_email = mysqli_real_escape_string($con, $_POST['email']);
+    $user_id = $_SESSION['id'];  // Get the logged-in user's ID
 
-    // Get user ID from session to link with the appointment
-    $user_id = $_SESSION['id'];  // Assuming the user ID is stored in the session
+    // Check if the user has already booked an appointment
+    $check_existing_appointment_query = "SELECT * FROM appointments WHERE user_id = ?";
+    $stmt_check_existing = mysqli_prepare($con, $check_existing_appointment_query);
 
-    // Check if the user already has an appointment
-    $check_appointment = mysqli_query($conn, "SELECT * FROM `contact_form` WHERE `user_id` = '$user_id'") or die('Query failed');
+    if ($stmt_check_existing) {
+        mysqli_stmt_bind_param($stmt_check_existing, "i", $user_id);
+        mysqli_stmt_execute($stmt_check_existing);
+        $result_check_existing = mysqli_stmt_get_result($stmt_check_existing);
 
-    if (mysqli_num_rows($check_appointment) > 0) {
-        // If user already has an appointment, show error message
-        $message[] = 'You have already made an appointment!';
-    } else {
-        // Get the current date
-        $today = date('Y-m-d'); // Format today's date as Y-m-d
-
-        // Check if the selected date is in the past
-        if ($date < $today) {
-            $message[] = 'You cannot book an appointment for a past date.';
+        if (mysqli_num_rows($result_check_existing) > 0) {
+            // User has already booked an appointment
+            $message[] = "You have already booked an appointment. You cannot book another one.";
         } else {
-            // Insert the appointment details into the contact_form table
-            $insert = mysqli_query($conn, "INSERT INTO `contact_form`(name, email, time, date, user_id) 
-                VALUES('$name', '$email', '$time', '$date', '$user_id')") or die('Query failed');
+            // Check if the selected slot is already booked by another user
+            $check_availability_query = "SELECT * FROM appointments WHERE appointment_date = ? AND appointment_time = ?";
+            $stmt = mysqli_prepare($con, $check_availability_query);
 
-            // Check if the appointment was successfully inserted
-            if ($insert) {
-                $message[] = 'Appointment made successfully!';
-            } else {
-                $message[] = 'Appointment failed.';
+            if ($stmt) {
+                mysqli_stmt_bind_param($stmt, "ss", $appointment_date, $appointment_time);
+                mysqli_stmt_execute($stmt);
+                $result = mysqli_stmt_get_result($stmt);
+
+                if (mysqli_num_rows($result) > 0) {
+                    // Slot is already booked
+                    $message[] = "The selected slot is already booked. Please choose another time.";
+                } else {
+                    // Slot is available, proceed with booking
+                    $insert_appointment_query = "INSERT INTO appointments (user_id, name, email, appointment_date, appointment_time) 
+                                                 VALUES (?, ?, ?, ?, ?)";
+                    $stmt_insert = mysqli_prepare($con, $insert_appointment_query);
+
+                    if ($stmt_insert) {
+                        mysqli_stmt_bind_param($stmt_insert, "issss", $user_id, $user_name, $user_email, $appointment_date, $appointment_time);
+                        if (mysqli_stmt_execute($stmt_insert)) {
+                            $message[] = "Appointment scheduled successfully!";
+                        } else {
+                            $message[] = "Error scheduling appointment. Please try again later.";
+                        }
+                        mysqli_stmt_close($stmt_insert);
+                    }
+                }
+                mysqli_stmt_close($stmt);
             }
         }
+        mysqli_stmt_close($stmt_check_existing);
     }
 }
 ?>
@@ -64,6 +83,12 @@ if (isset($_POST['submit'])) {
     <link rel="stylesheet" href="css/style.css">
 </head>
 <style>
+    .message {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
     /* General Styles */
     body {
         margin: 0;
@@ -164,40 +189,40 @@ if (isset($_POST['submit'])) {
     </header>
     <!-- header section ends -->
 
-    <!-- Appointment Section -->
-    <section class="appointment" id="appointment">
-        <h1 class="heading"> <span>appointment</span> now </h1>
-        <div class="row">
-            <div class="image">
-                <img src="image/appoint.png" alt="">
-            </div>
-            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <?php
-                // Check if there are any messages in the $message array
-                if (isset($message) && !empty($message)) {
-                    // Loop through and display each message
-                    foreach ($message as $msg) {
-                        echo '<p class="message" style="color: red;">' . $msg . '</p>';
-                    }
-                }
-                ?>
-                <h3>Make Appointment</h3>
-                <input type="text" name="name" placeholder="Your name" class="box" required>
-                <input type="email" name="email" placeholder="Your email" class="box" required>
-
-                <!-- Time input field with min and max values set -->
-                <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
-
-                <!-- Date input field with min value set to today -->
-                <input type="date" name="date" class="box" required id="dateInput">
-                <input type="submit" name="submit" value="Appointment Now" class="btn">
-            </form>
+<!-- Appointment Section -->
+<section class="appointment" id="appointment">
+    <h1 class="heading"> <span>Appointment</span> now </h1>
+    <div class="row">
+        <div class="image">
+            <img src="image/appoint.png" alt="">
         </div>
-    </section>
-    <!-- Appointment Section Ends -->
+        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+            <?php
+            // Display messages (error or success) if they exist
+            if (isset($message) && !empty($message)) {
+                foreach ($message as $msg) {
+                    echo '<p class="message" style="color: red;">' . $msg . '</p>';
+                }
+            }
+            ?>
+            <h3>Make Appointment</h3>
+            <input type="text" name="name" placeholder="Your name" class="box" required>
+            <input type="email" name="email" placeholder="Your email" class="box" required>
 
-    <!-- JS file link -->
-    <script src="js/script.js"></script>
+            <!-- Time input field with min and max values set -->
+            <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
+
+            <!-- Date input field with min value set to today -->
+            <input type="date" name="date" class="box" required id="dateInput">
+
+            <input type="submit" name="submit" value="Appointment Now" class="btn">
+        </form>
+    </div>
+</section>
+<!-- Appointment Section Ends -->
+
+<!-- JS file link -->
+<script src="js/script.js"></script>
     <script>
         // Disable past dates in the date input field
         document.addEventListener('DOMContentLoaded', function () {
