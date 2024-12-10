@@ -15,18 +15,28 @@ if (isset($_GET['token'])) {
         $current_time = date("Y-m-d H:i:s");
 
         if (strtotime($expiry_time) < strtotime($current_time)) {
-            echo "<div class='container'><div class='box'>The reset token has expired.</div></div>";
+            echo "<div class='container'><div class='box'>The reset token has expired. <a href='forgot-password.php'>Request a new one</a></div></div>";
         } else {
             // Token is valid, show the password reset form
             if (isset($_POST['reset'])) {
                 $password = mysqli_real_escape_string($con, $_POST['password']);
-                $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                // Update the password in the database
-                $update_query = "UPDATE users SET password='$hashed_password', reset_token=NULL, reset_token_expiry=NULL WHERE reset_token='$token'";
-                mysqli_query($con, $update_query);
+                // Basic password validation
+                if (strlen($password) < 8) {
+                    echo "<div class='container'><div class='box'>Password must be at least 8 characters long.</div></div>";
+                } else {
+                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-                echo "<div class='container'><div class='box'>Your password has been reset successfully. Now go page to Login Page.</div></div>";
+                    // Update the password in the database
+                    $update_query = "UPDATE users SET password='$hashed_password', reset_token=NULL, reset_token_expiry=NULL WHERE reset_token='$token'";
+                    mysqli_query($con, $update_query);
+
+                    echo "<div class='container'>
+                            <div class='box'>
+                                Your password has been reset successfully. <a href='login.php'>Click here to login</a>.
+                            </div>
+                          </div>";
+                }
             } else {
                 // Show the password reset form
                 echo '<div class="container">
@@ -46,7 +56,7 @@ if (isset($_GET['token'])) {
             }
         }
     } else {
-        echo "<div class='container'><div class='box'>Invalid token.</div></div>";
+        echo "<div class='container'><div class='box'>Invalid token. Please request a new reset link.</div></div>";
     }
 }
 ?>

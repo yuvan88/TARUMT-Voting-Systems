@@ -10,7 +10,7 @@ require 'vendor/autoload.php';
 
 if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
-    
+
     // Check if the email exists in the database
     $result = mysqli_query($con, "SELECT * FROM users WHERE Email='$email'");
     $row = mysqli_fetch_assoc($result);
@@ -31,7 +31,7 @@ if (isset($_POST['submit'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'www.yuvan9580@gmail.com';  // Replace with your email
-            $mail->Password = 'ufhv koqn vvwq tqui';     // Replace with your email password or App password
+            $mail->Password = 'ufhv koqn vvwq tqui';     // Replace with your email app password or environment variable
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -45,24 +45,26 @@ if (isset($_POST['submit'])) {
             $mail->Body = 'Click the following link to reset your password: <a href="http://localhost/TARUMT-Voting-Systems/reset-password.php?token=' . $token . '">Reset Password</a>';
 
             $mail->send();
-            echo "Password reset link has been sent to your email. Now go back to login page";
+            echo "If the email exists, a password reset link has been sent to your email. Please check your inbox.";
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }
     } else {
-        echo "Email not found.";
+        echo "If the email exists, a password reset link has been sent to your email. Please check your inbox.";
     }
 }
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Forgot Password</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
+
 <body>
     <div class="container">
         <div class="box form-box">
@@ -78,7 +80,6 @@ if (isset($_POST['submit'])) {
                 </div>
             </form>
             <div class="field">
-                <!-- Added login button -->
                 <a href="login.php" class="btn login-btn">Back to Login</a>
             </div>
         </div>
@@ -103,5 +104,5 @@ if (isset($_POST['submit'])) {
         }
     </style>
 </body>
-</html>
 
+</html>
