@@ -116,25 +116,40 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         height: auto;
     }
 
-    /* Navbar Styling */
-    .navbar {
+    /* New button container styles */
+    /* New button container styles */
+    .button-container {
         display: flex;
-        list-style: none;
+        justify-content: center;
+        /* Align buttons horizontally to the center */
+        align-items: center;
+        /* Align buttons vertically to the middle */
+        position: absolute;
+        /* Fixes position relative to the nearest positioned ancestor */
+        top: 80%;
+        left: 70%;
+        /* Horizontally centers the container */
+        transform: translateX(-50%);
+        /* Adjusts for the actual width of the container */
+        height: auto;
     }
 
-    .navbar a {
-        text-decoration: none;
+
+    .button-container .btn {
+        margin: 0 10px;
+        /* Space between buttons */
+        padding: 10px 20px;
         color: black;
-        margin: 0 15px;
-        font-size: 1rem;
-        line-height: 50px;
-        /* Center items vertically */
-        transition: color 0.3s;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 20px;
+        transition: background-color 0.3s;
     }
 
-    .navbar a:hover {
-        color: #007BFF;
-        /* Blue on hover */
+    .button-container .btn:hover {
+        background-color: #0056b3;
+        /* Darker blue when hovered */
     }
 
     /* Mobile Menu Button */
@@ -179,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
-            <a href="#appointment">Appointment</a>
+            <a href="appointment.php">Appointment</a>
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
@@ -189,40 +204,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </header>
     <!-- header section ends -->
 
-<!-- Appointment Section -->
-<section class="appointment" id="appointment">
-    <h1 class="heading"> <span>Appointment</span> now </h1>
-    <div class="row">
-        <div class="image">
-            <img src="image/appoint.png" alt="">
-        </div>
-        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-            <?php
-            // Display messages (error or success) if they exist
-            if (isset($message) && !empty($message)) {
-                foreach ($message as $msg) {
-                    echo '<p class="message" style="color: red;">' . $msg . '</p>';
+    <!-- Appointment Section -->
+    <section class="appointment" id="appointment">
+        <h1 class="heading"> <span>Appointment</span> now </h1>
+        <div class="row">
+            <div class="image">
+                <img src="image/appoint.png" alt="">
+            </div>
+            <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                <?php
+                // Display messages (error or success) if they exist
+                if (isset($message) && !empty($message)) {
+                    foreach ($message as $msg) {
+                        echo '<p class="message" style="color: red;">' . $msg . '</p>';
+                    }
                 }
-            }
-            ?>
-            <h3>Make Appointment</h3>
-            <input type="text" name="name" placeholder="Your name" class="box" required>
-            <input type="email" name="email" placeholder="Your email" class="box" required>
+                ?>
+                <h3>Make Appointment</h3>
+                <input type="text" name="name" placeholder="Your name" class="box" required>
+                <input type="email" name="email" placeholder="Your email" class="box" required>
 
-            <!-- Time input field with min and max values set -->
-            <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
+                <!-- Time input field with min and max values set -->
+                <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
 
-            <!-- Date input field with min value set to today -->
-            <input type="date" name="date" class="box" required id="dateInput">
+                <!-- Date input field with min value set to today -->
+                <input type="date" name="date" class="box" required id="dateInput">
 
-            <input type="submit" name="submit" value="Appointment Now" class="btn">
-        </form>
-    </div>
-</section>
-<!-- Appointment Section Ends -->
+                <input type="submit" name="submit" value="Appointment Now" class="btn">
+            </form>
+        </div>
+        <div class="button-container" style="text-align: center; margin-top: 20px;">
+            <a href="candidate_appointment.php" class="btn">Candidate</a> <!-- Button to page 1 -->
+            <a href="volunteer_appointment.php" class="btn">Volunteer</a> <!-- Button to page 2 -->
+        </div>
+    </section>
 
-<!-- JS file link -->
-<script src="js/script.js"></script>
+    <!-- Appointment Section Ends -->
+
+    <!-- JS file link -->
+    <script src="js/script.js"></script>
     <script>
         // Disable past dates in the date input field
         document.addEventListener('DOMContentLoaded', function () {

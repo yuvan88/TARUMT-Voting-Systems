@@ -48,18 +48,140 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
 
 ?>
 
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Candidate Appointment</title>
+    <title>TARUMT Voting System</title>
+
+    <!-- font awesome cdn link  -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+    <!-- custom css file link  -->
     <link rel="stylesheet" href="css/style.css">
 </head>
+<style>
+    .message {
+        color: red;
+        font-weight: bold;
+        margin-top: 10px;
+    }
+
+    /* General Styles */
+    body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+    }
+
+    /* Header Styling */
+    .header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: lightblue;
+        /* Turquoise background */
+        padding: 10px 20px;
+        position: fixed;
+        width: 100%;
+        top: 0;
+        z-index: 1000;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    .logo img {
+        width: 200px;
+        max-width: 100%;
+        height: auto;
+    }
+
+    /* New button container styles */
+    /* New button container styles */
+    .button-container {
+        display: flex;
+        justify-content: center;
+        /* Align buttons horizontally to the center */
+        align-items: center;
+        /* Align buttons vertically to the middle */
+        position: absolute;
+        /* Fixes position relative to the nearest positioned ancestor */
+        top: 80%;
+        left: 70%;
+        /* Horizontally centers the container */
+        transform: translateX(-50%);
+        /* Adjusts for the actual width of the container */
+        height: auto;
+    }
+
+
+    .button-container .btn {
+        margin: 0 10px;
+        /* Space between buttons */
+        padding: 10px 20px;
+        color: black;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        font-size: 20px;
+        transition: background-color 0.3s;
+    }
+
+    .button-container .btn:hover {
+        background-color: #0056b3;
+        /* Darker blue when hovered */
+    }
+
+    /* Mobile Menu Button */
+    #menu-btn {
+        display: none;
+        font-size: 24px;
+        cursor: pointer;
+    }
+
+    /* Responsive Design */
+    @media screen and (max-width: 768px) {
+        .navbar {
+            display: none;
+            flex-direction: column;
+            background-color: #40e0d0;
+            position: absolute;
+            top: 60px;
+            right: 0;
+            width: 100%;
+            text-align: center;
+        }
+
+        .navbar.active {
+            display: flex;
+        }
+
+        #menu-btn {
+            display: block;
+        }
+    }
+</style>
 
 <body>
+
+    <!-- header section starts  -->
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="image/tarumt.png" alt="TARUMT Logo">
+        </a>
+        <nav class="navbar">
+            <a href="index.php">Home</a>
+            <a href="#about">About</a>
+            <a href="#rule">Rule</a>
+            <a href="#staff">Staff</a>
+            <a href="appointment.php">Appointment</a>
+            <a href="voter.php">Voter</a>
+            <a href="#review">Review</a>
+            <a href="#blogs">Blogs</a>
+            <a href="register.php">Logout</a>
+        </nav>
+        <div id="menu-btn" class="fas fa-bars">☰</div>
+    </header>
+    <!-- header section ends -->
+
     <!-- Appointment Form -->
     <section class="appointment" id="appointment">
         <h1 class="heading"> <span>Candidate Appointment</span> </h1>
@@ -68,7 +190,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
                 <img src="image/appoint.png" alt="Appointment Image">
             </div>
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
-                <h3>Make Appointment</h3>
+                <h3>Candidate Appointment</h3>
 
                 <!-- Display error messages inside the form -->
                 <div>
@@ -92,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             </form>
         </div>
     </section>
+    <!-- Appointment Section Ends -->
 
     <script>
         // Disable past dates in the date input field
