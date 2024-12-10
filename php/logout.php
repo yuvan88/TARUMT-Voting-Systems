@@ -1,5 +1,8 @@
 <?php
-      session_start();
-      session_destroy();
-      header("Location: ../index.php");
+    session_start();      // Start the session
+    session_destroy();    // Destroy all session data
+
+    // Redirect with a message indicating logout success
+    header("Location: ../index.php?message=loggedout");
+    exit();
 ?>
