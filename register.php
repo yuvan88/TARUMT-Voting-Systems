@@ -2,48 +2,76 @@
 include("php/config.php");
 
 if (isset($_POST['submit'])) {
-    $username = mysqli_real_escape_string($con, $_POST['username']);
-    $email = mysqli_real_escape_string($con, $_POST['email']);
-    $age = mysqli_real_escape_string($con, $_POST['age']);
+    // Sanitize and validate inputs
+    $username = trim(mysqli_real_escape_string($con, $_POST['username']));
+    $email = trim(mysqli_real_escape_string($con, $_POST['email']));
+    $age = (int) $_POST['age']; // Cast age to an integer for safety
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Hash the password
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo "<div class='message'>
+                  <p>Invalid email format. Please try again.</p>
+              </div>";
+        exit;
+    }
 
-    // Check if the email already exists
-    $verify_query = mysqli_query($con, "SELECT Email FROM users WHERE Email='$email'");
-    if (mysqli_num_rows($verify_query) != 0) {
+    // Check if the email exists
+    $email_check_query = $con->prepare("SELECT Email FROM users WHERE Email = ?");
+    $email_check_query->bind_param("s", $email);
+    $email_check_query->execute();
+    $email_check_query->store_result();
+
+    if ($email_check_query->num_rows > 0) {
         echo "<div class='message'>
                   <p>This email is already registered. Try another one!</p>
               </div>";
         echo "<a href='register.php'><button class='btn'>Go Back</button></a>";
-    } else {
-        // Insert into database
-        $insert_query = "INSERT INTO users (Username, Email, Age, Password) VALUES ('$username', '$email', '$age', '$hashed_password')";
-        if (mysqli_query($con, $insert_query)) {
+        $email_check_query->close();
+        exit;
+    }
+    $email_check_query->close();
+
+    // Hash the password securely
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+    // Insert new user into the database
+    $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Password) VALUES (?, ?, ?, ?)");
+    $insert_query->bind_param("ssis", $username, $email, $age, $hashed_password);
+
+    try {
+        if ($insert_query->execute()) {
             echo "<div class='message'>
                       <p>Registration successful!</p>
                   </div>";
-            // echo "<a href='login.php'><button class='btn'>Login Now</button></a>";
-        } else {
-            echo "<div class='message'>
-                      <p>Registration failed. Please try again later.</p>
-                  </div>";
+            echo "<a href='login.php'></a>";
         }
+    } catch (mysqli_sql_exception $e) {
+        echo "<div class='message'>
+                  <p>Registration failed due to an unexpected error: " . $e->getMessage() . "</p>
+              </div>";
     }
+
+    // Close the prepared statement
+    $insert_query->close();
 }
 ?>
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
+
 <body>
     <div class="container">
         <div class="box form-box">
             <header>Register</header>
-            <form method="POST">
+            <form method="POST" action="">
                 <div class="field input">
                     <label>Username</label>
                     <input type="text" name="username" required>
@@ -70,4 +98,5 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 </body>
+
 </html>
