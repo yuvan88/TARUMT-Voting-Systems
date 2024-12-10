@@ -21,21 +21,27 @@ if (isset($_GET['token'])) {
             if (isset($_POST['reset'])) {
                 $password = mysqli_real_escape_string($con, $_POST['password']);
 
-                // Basic password validation
+                // Basic password validation (at least 8 characters)
                 if (strlen($password) < 8) {
                     echo "<div class='container'><div class='box'>Password must be at least 8 characters long.</div></div>";
                 } else {
+                    // Hash the new password
                     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
                     // Update the password in the database
                     $update_query = "UPDATE users SET password='$hashed_password', reset_token=NULL, reset_token_expiry=NULL WHERE reset_token='$token'";
-                    mysqli_query($con, $update_query);
-
-                    echo "<div class='container'>
-                            <div class='box'>
-                                Your password has been reset successfully. <a href='login.php'>Click here to login</a>.
-                            </div>
-                          </div>";
+                    if (mysqli_query($con, $update_query)) {
+                        echo "<div class='container'>
+                                <div class='box'>
+                                    Your password has been reset successfully. <a href='login.php'>Click here to login</a>.
+                                </div>
+                              </div>";
+                        // Redirect to login page after success
+                        header("Location: login.php");
+                        exit();
+                    } else {
+                        echo "<div class='container'><div class='box'>An error occurred. Please try again later.</div></div>";
+                    }
                 }
             } else {
                 // Show the password reset form

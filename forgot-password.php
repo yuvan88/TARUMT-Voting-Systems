@@ -45,12 +45,18 @@ if (isset($_POST['submit'])) {
             $mail->Body = 'Click the following link to reset your password: <a href="http://localhost/TARUMT-Voting-Systems/reset-password.php?token=' . $token . '">Reset Password</a>';
 
             $mail->send();
-            echo "If the email exists, a password reset link has been sent to your email. Please check your inbox.";
+            echo "<div class='message'>
+                      <p>If the email exists, a password reset link has been sent to your email. Please check your inbox.</p>
+                  </div>";
         } catch (Exception $e) {
-            echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+            echo "<div class='message'>
+                      <p>Message could not be sent. Mailer Error: {$mail->ErrorInfo}</p>
+                  </div>";
         }
     } else {
-        echo "If the email exists, a password reset link has been sent to your email. Please check your inbox.";
+        echo "<div class='message'>
+                  <p>If the email exists, a password reset link has been sent to your email. Please check your inbox.</p>
+              </div>";
     }
 }
 ?>
@@ -101,6 +107,11 @@ if (isset($_POST['submit'])) {
 
         .login-btn:hover {
             background-color: #0056b3;
+        }
+
+        .message {
+            color: green;
+            text-align: center;
         }
     </style>
 </body>

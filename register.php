@@ -16,6 +16,14 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
+    // Validate age (make sure it's a positive integer)
+    if ($age <= 0) {
+        echo "<div class='message'>
+                  <p>Age must be a positive number. Please try again.</p>
+              </div>";
+        exit;
+    }
+
     // Check if the email exists
     $email_check_query = $con->prepare("SELECT Email FROM users WHERE Email = ?");
     $email_check_query->bind_param("s", $email);
@@ -26,7 +34,7 @@ if (isset($_POST['submit'])) {
         echo "<div class='message'>
                   <p>This email is already registered. Try another one!</p>
               </div>";
-        echo "<a href='register.php'><button class='btn'>Go Back</button></a>";
+        echo "<a href='register.php'></a>";
         $email_check_query->close();
         exit;
     }
@@ -41,10 +49,9 @@ if (isset($_POST['submit'])) {
 
     try {
         if ($insert_query->execute()) {
-            echo "<div class='message'>
-                      <p>Registration successful!</p>
-                  </div>";
-            echo "<a href='login.php'></a>";
+            // Redirect to login page after successful registration
+            header("Location: login.php");
+            exit;
         }
     } catch (mysqli_sql_exception $e) {
         echo "<div class='message'>

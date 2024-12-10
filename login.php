@@ -6,7 +6,7 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Admin login
+    // Admin login (special case: bypass email validation)
     if ($email == "admin" && $password == "admin") {
         $_SESSION['valid'] = "admin";
         $_SESSION['username'] = "Admin";
@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
         exit();
     }
 
-    // User login (using prepared statements to prevent SQL injection)
+    // User login using prepared statements
     $stmt = mysqli_prepare($con, "SELECT * FROM users WHERE Email = ?");
     mysqli_stmt_bind_param($stmt, "s", $email);
     mysqli_stmt_execute($stmt);
@@ -31,14 +31,16 @@ if (isset($_POST['submit'])) {
             $_SESSION['id'] = $row['Id'];
             header("Location: index.php");  // Redirect to user homepage
             exit();
+        } else {
+            echo "<div class='message'>
+                      <p>Incorrect password. Please try again.</p>
+                  </div>";
         }
+    } else {
+        echo "<div class='message'>
+                  <p>Email not found. Please try again or register.</p>
+              </div>";
     }
-
-    // If login fails
-    echo "<div class='message'>
-              <p>Invalid login credentials. Please try again.</p>
-          </div>";
-    echo "<a href='login.php'></a>";
 }
 ?>
 
