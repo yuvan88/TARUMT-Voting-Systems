@@ -6,6 +6,7 @@ if (isset($_POST['submit'])) {
     $username = trim(mysqli_real_escape_string($con, $_POST['username']));
     $email = trim(mysqli_real_escape_string($con, $_POST['email']));
     $age = (int) $_POST['age']; // Cast age to an integer for safety
+    $address = mysqli_real_escape_string($con, $_POST['address']);  // Sanitize address input
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
     // Validate email format
@@ -34,7 +35,6 @@ if (isset($_POST['submit'])) {
         echo "<div class='message'>
                   <p>This email is already registered. Try another one!</p>
               </div>";
-        echo "<a href='register.php'></a>";
         $email_check_query->close();
         exit;
     }
@@ -44,8 +44,8 @@ if (isset($_POST['submit'])) {
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert new user into the database
-    $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Password) VALUES (?, ?, ?, ?)");
-    $insert_query->bind_param("ssis", $username, $email, $age, $hashed_password);
+    $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Address, Password) VALUES (?, ?, ?, ?, ?)");
+    $insert_query->bind_param("ssiss", $username, $email, $age, $address, $hashed_password);
 
     try {
         if ($insert_query->execute()) {
@@ -90,6 +90,10 @@ if (isset($_POST['submit'])) {
                 <div class="field input">
                     <label>Age</label>
                     <input type="number" name="age" required>
+                </div>
+                <div class="field input">
+                    <label>Address</label>
+                    <input type="text" name="address" required>
                 </div>
                 <div class="field input">
                     <label>Password</label>

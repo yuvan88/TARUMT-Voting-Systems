@@ -5,8 +5,11 @@ include("php/config.php");
 if (isset($_GET['token'])) {
     $token = $_GET['token'];
 
-    // Check if the token exists in the database
-    $result = mysqli_query($con, "SELECT * FROM users WHERE reset_token = '$token'");
+    // Prepared statement to prevent SQL injection
+    $stmt = mysqli_prepare($con, "SELECT * FROM users WHERE reset_token = ?");
+    mysqli_stmt_bind_param($stmt, 's', $token);
+    mysqli_stmt_execute($stmt);
+    $result = mysqli_stmt_get_result($stmt);
     $user = mysqli_fetch_assoc($result);
 
     if ($user) {
@@ -25,22 +28,33 @@ if (isset($_GET['token'])) {
                 if (strlen($password) < 8) {
                     echo "<div class='container'><div class='box'>Password must be at least 8 characters long.</div></div>";
                 } else {
-                    // Hash the new password
-                    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-                    // Update the password in the database
-                    $update_query = "UPDATE users SET password='$hashed_password', reset_token=NULL, reset_token_expiry=NULL WHERE reset_token='$token'";
-                    if (mysqli_query($con, $update_query)) {
-                        echo "<div class='container'>
-                                <div class='box'>
-                                    Your password has been reset successfully. <a href='login.php'>Click here to login</a>.
-                                </div>
-                              </div>";
-                        // Redirect to login page after success
-                        header("Location: login.php");
-                        exit();
+                    // Check if the password contains at least one uppercase letter, one number, and one special character
+                    if (!preg_match("/[A-Z]/", $password)) {
+                        echo "<div class='container'><div class='box'>Password must contain at least one uppercase letter.</div></div>";
+                    } elseif (!preg_match("/[0-9]/", $password)) {
+                        echo "<div class='container'><div class='box'>Password must contain at least one number.</div></div>";
+                    } elseif (!preg_match("/[\W_]/", $password)) {
+                        echo "<div class='container'><div class='box'>Password must contain at least one special character.</div></div>";
                     } else {
-                        echo "<div class='container'><div class='box'>An error occurred. Please try again later.</div></div>";
+                        // Hash the new password
+                        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+
+                        // Prepared statement to update password securely
+                        $stmt = mysqli_prepare($con, "UPDATE users SET password = ?, reset_token = NULL, reset_token_expiry = NULL WHERE reset_token = ?");
+                        mysqli_stmt_bind_param($stmt, 'ss', $hashed_password, $token);
+
+                        if (mysqli_stmt_execute($stmt)) {
+                            echo "<div class='container'>
+                                    <div class='box'>
+                                        Your password has been reset successfully. <a href='login.php'>Click here to login</a>.
+                                    </div>
+                                  </div>";
+                            // Redirect to login page after success
+                            header("Location: login.php");
+                            exit();
+                        } else {
+                            echo "<div class='container'><div class='box'>An error occurred. Please try again later.</div></div>";
+                        }
                     }
                 }
             } else {

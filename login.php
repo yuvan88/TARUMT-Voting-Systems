@@ -3,6 +3,7 @@ session_start();
 include("php/config.php");
 
 if (isset($_POST['submit'])) {
+    // Sanitize input values
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
@@ -12,7 +13,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['username'] = "Admin";
         $_SESSION['id'] = 1;  // Admin user ID (adjust based on your DB)
         $_SESSION['is_admin'] = 1;  // Admin role
-        header("Location: admin/index.php");
+        header("Location: admin/index.php");  // Redirect to the admin panel
         exit();
     }
 
@@ -22,13 +23,16 @@ if (isset($_POST['submit'])) {
     mysqli_stmt_execute($stmt);
     $result = mysqli_stmt_get_result($stmt);
 
+    // If user exists in the database
     if ($row = mysqli_fetch_assoc($result)) {
         // Verify password
         if (password_verify($password, $row['Password'])) {
+            // Set session variables for user
             $_SESSION['valid'] = $row['Email'];
             $_SESSION['username'] = $row['Username'];
             $_SESSION['age'] = $row['Age'];
             $_SESSION['id'] = $row['Id'];
+            $_SESSION['is_admin'] = $row['is_admin'];  // For differentiating admin and user
             header("Location: index.php");  // Redirect to user homepage
             exit();
         } else {

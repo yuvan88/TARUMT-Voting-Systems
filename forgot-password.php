@@ -92,7 +92,6 @@ if (isset($_POST['submit'])) {
     </div>
 
     <style>
-        /* Additional CSS to style the login button */
         .login-btn {
             display: block;
             text-align: center;
