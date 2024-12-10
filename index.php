@@ -62,7 +62,6 @@ if (isset($_POST['submit'])) {
 
     <!-- custom css file link  -->
     <link rel="stylesheet" href="css/style.css">
-
 </head>
 <style>
     .message {
@@ -307,42 +306,35 @@ if (isset($_POST['submit'])) {
 
     <!-- home section starts  -->
     <section class="home" id="home">
-
         <div class="image">
             <img src="image/voting1.png" alt="">
         </div>
-
         <div class="content">
             <h3>TARUMT Voting System</h3>
             <p> The TARUMT Voting System is designed to empower students to elect the next Malaysia President using a
                 secure, efficient, and transparent voting process. </p>
             <a href="#appointment" class="btn"> Appointment us <span class="fas fa-chevron-right"></span> </a>
         </div>
-
     </section>
     <!-- home section ends -->
 
     <!-- icons section starts  -->
     <section class="icons-container">
-
         <div class="icons">
             <i class="fas fa-globe"></i>
             <h3>100+</h3>
             <p>Workers</p>
         </div>
-
         <div class="icons">
             <i class="fas fa-users"></i>
             <h3>3000+</h3>
             <p>Participant</p>
         </div>
-
         <div class="icons">
             <i class="fa fa-map-marker"></i>
             <h3>50+</h3>
             <p>location</p>
         </div>
-
         <div class="icons">
             <i class="fas fa-fire-alt"></i>
             <h3>5+</h3>
@@ -353,15 +345,11 @@ if (isset($_POST['submit'])) {
 
     <!-- about section starts  -->
     <section class="about" id="about">
-
         <h1 class="heading"> <span>about</span> us </h1>
-
         <div class="row">
-
             <div class="image">
-                <img src="image/voting.svg" alt="">
+                <img src="image/aboutus.jpg" alt="">
             </div>
-
             <div class="content">
                 <h3>TARUMT Voting System for Electing the Next President</h3>
                 <p>The TARUMT Voting System enables students to securely and efficiently vote for the next Malaysia
@@ -370,7 +358,6 @@ if (isset($_POST['submit'])) {
                     ensures a fair, transparent, and modern election process for all TARUMT students.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
         </div>
     </section>
     <!-- about section ends -->
@@ -378,9 +365,7 @@ if (isset($_POST['submit'])) {
     <!-- rules section starts  -->
     <section class="rules" id="rule">
         <h1 class="heading"> TARUMT <span>Rule</span> </h1>
-
         <div class="box-container">
-
             <div class="box">
                 <img src="image/rule1.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Eligibility to Vote</h3>
@@ -388,14 +373,12 @@ if (isset($_POST['submit'])) {
                     office.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule2.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Verify Voter Details</h3>
                 <p>Check your voter details on the Election Commission's website or contact us.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule3.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Locate Your Polling Station</h3>
@@ -403,14 +386,12 @@ if (isset($_POST['submit'])) {
                     website.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule4.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Arrive Early on Election Day</h3>
                 <p>Be at the polling station early to avoid long queues and ensure your IC number is verified.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule5.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Verification by Polling Clerks</h3>
@@ -418,7 +399,6 @@ if (isset($_POST['submit'])) {
                     off the electoral list.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule6.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Indelible Ink Check</h3>
@@ -426,7 +406,6 @@ if (isset($_POST['submit'])) {
                     you've voted.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule7.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Marking Your Votesss</h3>
@@ -434,25 +413,20 @@ if (isset($_POST['submit'])) {
                     your vote is valid.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
             <div class="box">
                 <img src="image/rule8.png" style=" border-radius: 4px; padding: 5px; width: 220px;" alt="TARUMT Logo">
                 <h3>Submit Your Ballot Paper</h3>
                 <p>Fold your ballot paper, then place it in the appropriate ballot boxes for parliamentary.</p>
                 <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
             </div>
-
         </div>
     </section>
     <!-- rules section ends -->
 
     <!-- staff section starts  -->
     <section class="staffs" id="staff">
-
         <h1 class="heading"> our <span>staff</span> </h1>
-
         <div class="box-container">
-
             <div class="box">
                 <img src="image/bk1.png" alt="">
                 <h3>Boon Kang</h3>
@@ -464,7 +438,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/pz.png" alt="">
                 <h3>Pang Zhi Kean</h3>
@@ -476,7 +449,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/joe.png" alt="">
                 <h3>Joe</h3>
@@ -488,7 +460,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/qw.png" alt="">
                 <h3>Qi wei</h3>
@@ -500,7 +471,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/royce.png" alt="">
                 <h3>Royce</h3>
@@ -512,7 +482,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/tiff.png" alt="">
                 <h3>Tiffany</h3>
@@ -524,7 +493,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/qw1.png" alt="">
                 <h3>Qi Wei again</h3>
@@ -536,7 +504,6 @@ if (isset($_POST['submit'])) {
                     <a href="#" class="fab fa-linkedin"></a>
                 </div>
             </div>
-
             <div class="box">
                 <img src="image/bk2.png" alt="">
                 <h3>Boon kang fat</h3>
@@ -577,11 +544,11 @@ if (isset($_POST['submit'])) {
                 <ul>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Monday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Tuesday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Wednesday</span>
@@ -589,19 +556,19 @@ if (isset($_POST['submit'])) {
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Thursday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Friday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Saturday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                     <li data-aos="fade-right" data-aos-duration="1000">
                         <span>Sunday</span>
-                        <span>CLOSED</span>
+                        <span>08:00AM - 5:00PM</span>
                     </li>
                 </ul>
             </div>
@@ -612,12 +579,10 @@ if (isset($_POST['submit'])) {
     <!-- Appointment Section -->
     <section class="appointment" id="appointment">
         <h1 class="heading"> <span>appointment</span> now </h1>
-
         <div class="row">
             <div class="image">
-                <img src="image/appointment.png" alt="">
+                <img src="image/appoint.png" alt="">
             </div>
-
             <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
                 <?php
                 // Check if there are any messages in the $message array
@@ -628,7 +593,6 @@ if (isset($_POST['submit'])) {
                     }
                 }
                 ?>
-
                 <h3>Make Appointment</h3>
                 <input type="text" name="name" placeholder="Your name" class="box" required>
                 <input type="email" name="email" placeholder="Your email" class="box" required>
@@ -646,14 +610,11 @@ if (isset($_POST['submit'])) {
 
     <!-- review section starts  -->
     <section class="review" id="review">
-
         <h1 class="heading"> Student <span>review</span> </h1>
-
         <div class="box-container">
-
             <div class="box">
                 <img src="image/pic-1.jpg" alt="">
-                <h3>win coder</h3>
+                <h3>Sarah Lim</h3>
                 <div class="stars">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -661,14 +622,13 @@ if (isset($_POST['submit'])) {
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star-half-alt"></i>
                 </div>
-                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam sapiente nihil
-                    aperiam? Repellat sequi nisi aliquid perspiciatis libero nobis rem numquam nesciunt alias sapiente
-                    minus voluptatem, reiciendis consequuntur optio dolorem!</p>
+                <p class="text">The TARUMT Voting System made voting so much easier and secure with its fingerprint
+                    verification. The system is fast, reliable, and user-friendly. I was impressed with how smooth the
+                    entire voting process was. Highly recommended!</p>
             </div>
-
             <div class="box">
                 <img src="image/pic-1.jpg" alt="">
-                <h3>win coder</h3>
+                <h3>Jason Tan</h3>
                 <div class="stars">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -676,14 +636,13 @@ if (isset($_POST['submit'])) {
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star-half-alt"></i>
                 </div>
-                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam sapiente nihil
-                    aperiam? Repellat sequi nisi aliquid perspiciatis libero nobis rem numquam nesciunt alias sapiente
-                    minus voluptatem, reiciendis consequuntur optio dolorem!</p>
+                <p class="text">I had an amazing experience using the TARUMT Voting System. The registration process was
+                    quick, and the fingerprint scanner made me feel secure while voting. The confirmation emails kept me
+                    updated, and the whole system was so easy to use!</p>
             </div>
-
             <div class="box">
                 <img src="image/pic-1.jpg" alt="">
-                <h3>win coder</h3>
+                <h3>Rajesh Kumar</h3>
                 <div class="stars">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -691,9 +650,9 @@ if (isset($_POST['submit'])) {
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star-half-alt"></i>
                 </div>
-                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Laboriosam sapiente nihil
-                    aperiam? Repellat sequi nisi aliquid perspiciatis libero nobis rem numquam nesciunt alias sapiente
-                    minus voluptatem, reiciendis consequuntur optio dolorem!</p>
+                <p class="text">Using the TARUMT Voting System was a breeze! The biometric fingerprint verification made
+                    the process smooth and secure. I received clear instructions, and the system worked perfectly during
+                    my voting session. Definitely a game-changer for student elections!</p>
             </div>
         </div>
     </section>
@@ -701,66 +660,20 @@ if (isset($_POST['submit'])) {
 
     <!-- blogs section starts  -->
     <section class="blogs" id="blogs">
-
-        <h1 class="heading"> our <span>blogs</span> </h1>
-
+        <h1 class="heading"> Our <span>Blogs</span> </h1>
         <div class="box-container">
-
             <div class="box">
                 <div class="image">
                     <img src="image/event1.png" alt="">
                 </div>
                 <div class="content">
                     <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
+                        <a href="#"> <i class="fas fa-calendar"></i> 14 March, 2025 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Sarah Lim </a>
                     </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
-                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="image">
-                    <img src="image/event2.png" alt="">
-                </div>
-                <div class="content">
-                    <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
-                    </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
-                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
-                </div>
-            </div>
-
-            <div class="box">
-                <div class="image">
-                    <img src="image/event3.png" alt="">
-                </div>
-                <div class="content">
-                    <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
-                    </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
-                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
-                </div>
-            </div>
-            <div class="box">
-                <div class="image">
-                    <img src="image/event1.png" alt="">
-                </div>
-                <div class="content">
-                    <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
-                    </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
+                    <h3>Streamlining the Voting Process with TARUMT</h3>
+                    <p>The TARUMT Voting System has revolutionized the way we vote by offering fast, secure, and
+                        hassle-free biometric authentication. Discover how it has improved student elections!</p>
                     <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
                 </div>
             </div>
@@ -770,11 +683,12 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="content">
                     <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
+                        <a href="#"> <i class="fas fa-calendar"></i> 5 February, 2024 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Jason Tan </a>
                     </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
+                    <h3>Benefits of Secure Voting Systems</h3>
+                    <p>In this blog post, we explore the importance of secure and trustworthy voting systems like
+                        TARUMT, which ensures every vote counts with biometric verification and encryption.</p>
                     <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
                 </div>
             </div>
@@ -784,11 +698,57 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="content">
                     <div class="icon">
-                        <a href="#"> <i class="fas fa-calendar"></i> 21 november, 2022 </a>
-                        <a href="#"> <i class="fas fa-user"></i> by win coder </a>
+                        <a href="#"> <i class="fas fa-calendar"></i> 18 April, 2025 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Rajesh Kumar </a>
                     </div>
-                    <h3>blog title win coder goes here</h3>
-                    <p>Lorem ipsum, dolor sit amet consectetur adipisicing elit. Provident, eius.</p>
+                    <h3>Why TARUMT's Biometric Voting is the Future</h3>
+                    <p>TARUMT's fingerprint-based verification offers an extra layer of security and convenience in the
+                        voting process, ensuring that student elections are transparent and reliable.</p>
+                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="image">
+                    <img src="image/event1.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="icon">
+                        <a href="#"> <i class="fas fa-calendar"></i> 22 January, 2024 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Sarah Lim </a>
+                    </div>
+                    <h3>Enhancing Student Elections with Technology</h3>
+                    <p>Learn how TARUMT's integration of technology has made the election process more efficient, with
+                        real-time results and the ability to vote from any location with ease.</p>
+                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="image">
+                    <img src="image/event2.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="icon">
+                        <a href="#"> <i class="fas fa-calendar"></i> 8 June, 2024 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Jason Tan </a>
+                    </div>
+                    <h3>Introducing the Future of Secure Voting</h3>
+                    <p>The new TARUMT Voting System introduces state-of-the-art fingerprint recognition technology,
+                        ensuring only eligible voters participate and that their votes are securely recorded.</p>
+                    <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
+                </div>
+            </div>
+            <div class="box">
+                <div class="image">
+                    <img src="image/event3.png" alt="">
+                </div>
+                <div class="content">
+                    <div class="icon">
+                        <a href="#"> <i class="fas fa-calendar"></i> 30 November, 2025 </a>
+                        <a href="#"> <i class="fas fa-user"></i> by Rajesh Kumar </a>
+                    </div>
+                    <h3>The Evolution of Voting: From Paper to Biometric</h3>
+                    <p>Explore the evolution of the voting system, from traditional paper ballots to biometric
+                        verification in TARUMT, and how it enhances trust and accuracy in student elections.</p>
                     <a href="#" class="btn"> learn more <span class="fas fa-chevron-right"></span> </a>
                 </div>
             </div>
@@ -796,55 +756,52 @@ if (isset($_POST['submit'])) {
     </section>
     <!-- blogs section ends -->
 
-    <!-- footer section starts  -->
+    <!-- footer section starts -->
     <section class="footer">
         <div class="box-container">
-
             <div class="box">
-                <h3>quick links</h3>
-                <a href="#home"> <i class="fas fa-chevron-right"></i> home </a>
-                <a href="#about"> <i class="fas fa-chevron-right"></i> about </a>
-                <a href="#rules"> <i class="fas fa-chevron-right"></i> rule </a>
-                <a href="#staffs"> <i class="fas fa-chevron-right"></i> staffs </a>
-                <a href="#appointment"> <i class="fas fa-chevron-right"></i> appointment </a>
-                <a href="#review"> <i class="fas fa-chevron-right"></i> review </a>
-                <a href="#blogs"> <i class="fas fa-chevron-right"></i> blogs </a>
+                <h3>Quick Links</h3>
+                <a href="#home"> <i class="fas fa-chevron-right"></i> Home </a>
+                <a href="#about"> <i class="fas fa-chevron-right"></i> About </a>
+                <a href="#rule"> <i class="fas fa-chevron-right"></i> Rules </a>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> Staffs </a>
+                <a href="#appointment"> <i class="fas fa-chevron-right"></i> Appointment </a>
+                <a href="#review"> <i class="fas fa-chevron-right"></i> Review </a>
+                <a href="#blogs"> <i class="fas fa-chevron-right"></i> Blogs </a>
             </div>
 
             <div class="box">
-                <h3>our services</h3>
-                <a href="#"> <i class="fas fa-chevron-right"></i> dental care </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> message therapy </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> cardioloty </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> diagnosis </a>
-                <a href="#"> <i class="fas fa-chevron-right"></i> ambulance service </a>
+                <h3>Our Services</h3>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> IT Staff </a>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> IT Manager </a>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> IT admin </a>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> IT supervisor </a>
+                <a href="#staff"> <i class="fas fa-chevron-right"></i> IT helper </a>
             </div>
 
             <div class="box">
-                <h3>appointment info</h3>
-                <a href="#"> <i class="fas fa-phone"></i> +8801688238801 </a>
-                <a href="#"> <i class="fas fa-phone"></i> +8801782546978 </a>
-                <a href="#"> <i class="fas fa-envelope"></i> wincoder9@gmail.com </a>
-                <a href="#"> <i class="fas fa-envelope"></i> sujoncse26@gmail.com </a>
-                <a href="#"> <i class="fas fa-map-marker-alt"></i> sylhet, bangladesh </a>
+                <h3>Appointment Info</h3>
+                <a href="tel:+0623399289282"> <i class="fas fa-phone"></i> +0623399289282 </a>
+                <a href="tel:+0162829338937"> <i class="fas fa-phone"></i> +0162829338937 </a>
+                <a href="mailto:tarumt@gmail.com"> <i class="fas fa-envelope"></i> tarumt@gmail.com </a>
+                <a href="mailto:votingsystem@gmail.com"> <i class="fas fa-envelope"></i> votingsystem@gmail.com </a>
+                <a href="#"> <i class="fas fa-map-marker-alt"></i> TARUMT, Setapak </a>
             </div>
 
             <div class="box">
-                <h3>follow us</h3>
-                <a href="#"> <i class="fab fa-faceappointment-f"></i> faceappointment </a>
-                <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
-                <a href="#"> <i class="fab fa-twitter"></i> twitter </a>
-                <a href="#"> <i class="fab fa-instagram"></i> instagram </a>
-                <a href="#"> <i class="fab fa-linkedin"></i> linkedin </a>
-                <a href="#"> <i class="fab fa-pinterest"></i> pinterest </a>
+                <h3>Follow Us</h3>
+                <a href="#"> <i class="fab fa-facebook-f"></i> Facebook </a>
+                <a href="#"> <i class="fab fa-twitter"></i> Twitter </a>
+                <a href="#"> <i class="fab fa-instagram"></i> Instagram </a>
+                <a href="#"> <i class="fab fa-linkedin"></i> LinkedIn </a>
+                <a href="#"> <i class="fab fa-pinterest"></i> Pinterest </a>
             </div>
         </div>
-        <div class="credit"> created by <span>win coder</span> | all rights reserved </div>
+        <div class="credit"> Created by <span>Yuvan and Tim</span> | All Rights Reserved </div>
     </section>
     <!-- footer section ends -->
 
-
-    <!-- js file link  -->
+    <!-- JS file link -->
     <script src="js/script.js"></script>
     <script>
         // Disable past dates in the date input field
@@ -876,12 +833,11 @@ if (isset($_POST['submit'])) {
 
             // If the selected time is outside the range, reset the value to the last valid time
             if (time < minTime || time > maxTime) {
-                alert("Please select a time between 08:00 AM and 05:00 PM.");
+                alert("Invalid time selection. Please choose a time between 08:00 and 17:00.");
                 this.value = '';  // Reset the time field
             }
         });
     </script>
-
 </body>
 
 </html>
