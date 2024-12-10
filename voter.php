@@ -1,5 +1,5 @@
 <?php
-session_start();  // Start the session to check user login status
+session_start();
 
 // Database connection
 $conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connection failed');
@@ -7,7 +7,7 @@ $conn = mysqli_connect('localhost', 'root', '', 'votingSystem') or die('Connecti
 // Check if the user is logged in
 if (!isset($_SESSION['valid'])) {
     echo '<p class="message">You must be logged in to vote.</p>';
-    exit(); // Stop the script if the user is not logged in
+    exit();
 }
 
 // Check if the user has already voted
@@ -38,7 +38,7 @@ if (isset($_POST['submit_vote'])) {
 
     // Insert the vote into the database
     $insert = mysqli_query($conn, "INSERT INTO votes (user_id, president, booking_time) 
-        VALUES('$user_id', '$president', '$booking_time')") or die('Query failed');
+        VALUES('$user_id', '$president', '$booking_time')");
 
     // Check if the vote was successfully inserted
     if ($insert) {
@@ -58,10 +58,7 @@ if (isset($_POST['submit_vote'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARUMT Voting System</title>
 
-    <!-- Font Awesome CDN link -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-
-    <!-- Custom CSS file link -->
     <link rel="stylesheet" href="css/style.css">
 
     <style>
@@ -257,7 +254,6 @@ if (isset($_POST['submit_vote'])) {
 
 <body>
 
-    <!-- header section starts  -->
     <header class="header">
         <a href="#" class="logo">
             <img src="image/tarumt.png" alt="TARUMT Logo">
@@ -273,11 +269,8 @@ if (isset($_POST['submit_vote'])) {
             <a href="#blogs">Blogs</a>
             <a href="register.php">Logout</a>
         </nav>
-        <div id="menu-btn" class="fas fa-bars">☰</div>
     </header>
-    <!-- header section ends -->
 
-    <!-- Voting Section -->
     <section class="vote-section">
         <h3>Vote for the Malaysia Student President</h3>
 
@@ -322,7 +315,6 @@ if (isset($_POST['submit_vote'])) {
                 </div>
             </div>
 
-            <!-- Booking Time -->
             <div class="booking-time">
                 <h4>Select your Booking Time:</h4>
                 <select name="booking_time" required>
