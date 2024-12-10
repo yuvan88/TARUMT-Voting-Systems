@@ -25,8 +25,8 @@ if ($existing_vote) {
     exit(); // Stop the script to prevent further actions
 }
 
-// Fetch available timeslots for the logged-in user
-$query = "SELECT * FROM contact_form WHERE user_id = $user_id";
+// Fetch available timeslots for the logged-in user from the appointments database
+$query = "SELECT appointment_time, appointment_date FROM appointments WHERE user_id = $user_id";
 $result = mysqli_query($conn, $query);
 $bookings = mysqli_fetch_all($result, MYSQLI_ASSOC);
 
@@ -51,16 +51,13 @@ if (isset($_POST['submit_vote'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARUMT Voting System</title>
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
-
     <style>
         /* General Styles */
         body {
@@ -69,7 +66,6 @@ if (isset($_POST['submit_vote'])) {
             padding: 0;
             background-color: #f4f4f9;
             padding-top: 80px;
-            /* Added padding to prevent header overlap */
         }
 
         /* Header Styling */
@@ -134,10 +130,8 @@ if (isset($_POST['submit_vote'])) {
             justify-content: center;
             flex-wrap: wrap;
             gap: 20px;
-            /* Increased gap for better spacing between cards */
             margin: 0 auto;
         }
-
 
         .vote-card {
             background: #fff;
@@ -145,24 +139,19 @@ if (isset($_POST['submit_vote'])) {
             border-radius: 10px;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             width: 280px;
-            /* Keep this width or adjust for uniformity */
             height: 350px;
-            /* Set a fixed height for uniformity */
             text-align: center;
             padding: 20px;
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            /* Ensures contents are evenly spaced */
         }
 
         .vote-card img {
             width: 100%;
             height: 150px;
-            /* Fixed height to ensure uniformity */
             object-fit: cover;
-            /* Ensures images fit the box without stretching */
             border-radius: 10px;
         }
 
@@ -186,7 +175,6 @@ if (isset($_POST['submit_vote'])) {
             transform: translateY(-5px);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
         }
-
 
         .booking-time {
             margin: 20px 0;
@@ -238,7 +226,6 @@ if (isset($_POST['submit_vote'])) {
             font-weight: bold;
         }
 
-
         @media (max-width: 768px) {
             .vote-container {
                 flex-direction: column;
@@ -251,86 +238,84 @@ if (isset($_POST['submit_vote'])) {
         }
     </style>
 </head>
-
 <body>
 
-    <header class="header">
-        <a href="#" class="logo">
-            <img src="image/tarumt.png" alt="TARUMT Logo">
-        </a>
-        <nav class="navbar">
-            <a href="index.php">Home</a>
-            <a href="#about">About</a>
-            <a href="#rule">Rule</a>
-            <a href="#staff">Staff</a>
-            <a href="appointment.php">Appointment</a>
-            <a href="voter.php">Voter</a>
-            <a href="#review">Review</a>
-            <a href="#blogs">Blogs</a>
-            <a href="register.php">Logout</a>
-        </nav>
-    </header>
+<header class="header">
+    <a href="#" class="logo">
+        <img src="image/tarumt.png" alt="TARUMT Logo">
+    </a>
+    <nav class="navbar">
+        <a href="index.php">Home</a>
+        <a href="#about">About</a>
+        <a href="#rule">Rule</a>
+        <a href="#staff">Staff</a>
+        <a href="appointment.php">Appointment</a>
+        <a href="voter.php">Voter</a>
+        <a href="#review">Review</a>
+        <a href="#blogs">Blogs</a>
+        <a href="register.php">Logout</a>
+    </nav>
+</header>
 
-    <section class="vote-section">
-        <h3>Vote for the Malaysia Student President</h3>
+<section class="vote-section">
+    <h3>Vote for the Malaysia Student President</h3>
 
-        <?php
-        if (isset($message)) {
-            foreach ($message as $msg) {
-                echo "<p class='message'>$msg</p>";
-            }
+    <?php
+    if (isset($message)) {
+        foreach ($message as $msg) {
+            echo "<p class='message'>$msg</p>";
         }
-        ?>
+    }
+    ?>
 
-        <form action="voter.php" method="POST">
-            <div class="vote-container">
-                <!-- President 1 -->
-                <div class="vote-card">
-                    <img src="image/vote1.png" alt="President 1">
-                    <h4>President 1</h4>
-                    <p>Brief description about President 1's achievements.</p>
-                    <label>
-                        <input type="radio" name="president" value="President 1" required> Select
-                    </label>
-                </div>
-
-                <!-- President 2 -->
-                <div class="vote-card">
-                    <img src="image/vote2.png" alt="President 2">
-                    <h4>President 2</h4>
-                    <p>Brief description about President 2's achievements.</p>
-                    <label>
-                        <input type="radio" name="president" value="President 2" required> Select
-                    </label>
-                </div>
-
-                <!-- President 3 -->
-                <div class="vote-card">
-                    <img src="image/vote3.png" alt="President 3">
-                    <h4>President 3</h4>
-                    <p>Brief description about President 3's achievements.</p>
-                    <label>
-                        <input type="radio" name="president" value="President 3" required> Select
-                    </label>
-                </div>
+    <form action="voter.php" method="POST">
+        <div class="vote-container">
+            <!-- President 1 -->
+            <div class="vote-card">
+                <img src="image/vote1.png" alt="President 1">
+                <h4>President 1</h4>
+                <p>Brief description about President 1's achievements.</p>
+                <label>
+                    <input type="radio" name="president" value="President 1" required> Select
+                </label>
             </div>
 
-            <div class="booking-time">
-                <h4>Select your Booking Time:</h4>
-                <select name="booking_time" required>
-                    <option value="">Select a time</option>
-                    <?php
-                    foreach ($bookings as $booking) {
-                        echo "<option value='{$booking['time']}'>Time: {$booking['time']}</option>";
-                    }
-                    ?>
-                </select>
+            <!-- President 2 -->
+            <div class="vote-card">
+                <img src="image/vote2.png" alt="President 2">
+                <h4>President 2</h4>
+                <p>Brief description about President 2's achievements.</p>
+                <label>
+                    <input type="radio" name="president" value="President 2" required> Select
+                </label>
             </div>
 
-            <button type="submit" name="submit_vote" class="btn">Cast Vote</button>
-        </form>
-    </section>
+            <!-- President 3 -->
+            <div class="vote-card">
+                <img src="image/vote3.png" alt="President 3">
+                <h4>President 3</h4>
+                <p>Brief description about President 3's achievements.</p>
+                <label>
+                    <input type="radio" name="president" value="President 3" required> Select
+                </label>
+            </div>
+        </div>
+
+        <div class="booking-time">
+            <h4>Select your Booking Time:</h4>
+            <select name="booking_time" required>
+                <option value="">Select a time</option>
+                <?php
+                foreach ($bookings as $booking) {
+                    echo "<option value='{$booking['appointment_time']}'>Date: {$booking['appointment_date']} - Time: {$booking['appointment_time']}</option>";
+                }
+                ?>
+            </select>
+        </div>
+
+        <button type="submit" name="submit_vote" class="btn">Cast Vote</button>
+    </form>
+</section>
 
 </body>
-
 </html>
