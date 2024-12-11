@@ -39,12 +39,6 @@ if (isset($_POST['submit'])) {
     $email = mysqli_real_escape_string($con, $_POST['email']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Validate email format
-    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "<div class='message'><p>Invalid email format. Please try again.</p></div>";
-        exit;
-    }
-
     // Check login attempts before allowing further login attempts
     if (!check_login_attempts($email, $con)) {
         echo "<div class='message'><p>Too many failed login attempts. Please try again later.</p></div>";
@@ -57,7 +51,7 @@ if (isset($_POST['submit'])) {
         $_SESSION['username'] = "Admin";
         $_SESSION['id'] = 1;  // Admin user ID (adjust based on your DB)
         $_SESSION['is_admin'] = 1;  // Admin role
-        header("Location: admin/index.php");  // Redirect to the admin panel
+        header("Location: admin/dashboard.php");  // Redirect to the admin panel
         exit();
     }
 
