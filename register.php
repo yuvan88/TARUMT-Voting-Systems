@@ -19,6 +19,31 @@ function decrypt_data($data) {
     return openssl_decrypt(base64_decode($data), ENCRYPTION_METHOD, $key, 0, $iv);
 }
 
+// Function to check file integrity
+function check_file_integrity($file_path, $expected_hash) {
+    if (!file_exists($file_path)) {
+        echo "File does not exist: " . $file_path;
+        return;
+    }
+
+    // Generate the hash of the file
+    $file_hash = hash_file('sha256', $file_path);
+
+    // Check if the hash matches the expected value
+    if ($file_hash === $expected_hash) {
+        echo "File integrity verified: " . basename($file_path);
+    } else {
+        echo "File integrity compromised: " . basename($file_path);
+    }
+}
+
+// Example usage of the function (Replace with actual file path and expected hash)
+$expected_hash = 'expected-hash-value';  // Replace this with the actual expected hash for the file
+$file_path = __FILE__;  // This will automatically get the current file's path
+
+// Perform file integrity check
+check_file_integrity($file_path, $expected_hash);
+
 if (isset($_POST['submit'])) {
     // Sanitize and validate inputs
     $username = trim(mysqli_real_escape_string($con, $_POST['username']));
