@@ -37,18 +37,21 @@ function check_file_integrity($file_path, $expected_hash) {
     }
 }
 
-// Example usage of the function (Replace with actual file path and expected hash)
-$expected_hash = 'expected-hash-value';  // Replace this with the actual expected hash for the file
-$file_path = __FILE__;  // This will automatically get the current file's path
-
-// Perform file integrity check
-check_file_integrity($file_path, $expected_hash);
-
+// Check if form is submitted
 if (isset($_POST['submit'])) {
     // Sanitize and validate inputs
     $username = trim(mysqli_real_escape_string($con, $_POST['username']));
     $email = trim(mysqli_real_escape_string($con, $_POST['email']));
-    $age = (int)$_POST['age'];
+
+    // Validate and handle age input
+    $age = isset($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 ? (int)$_POST['age'] : NULL;
+
+    // Validate age input more clearly
+    if ($age === NULL) {
+        echo "<div class='message'><p>Invalid age provided. Please enter a valid number greater than zero.</p></div>";
+        exit;
+    }
+
     $address = mysqli_real_escape_string($con, $_POST['address']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
@@ -58,13 +61,7 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
-    // Validate age
-    if ($age <= 0) {
-        echo "<div class='message'><p>Age must be a positive number. Please try again.</p></div>";
-        exit;
-    }
-
-    // Check if the email exists
+    // Check if the email already exists in the database
     $email_check_query = $con->prepare("SELECT Email FROM users WHERE Email = ?");
     $email_check_query->bind_param("s", $email);
     $email_check_query->execute();
@@ -79,14 +76,16 @@ if (isset($_POST['submit'])) {
 
     // Encrypt sensitive data
     $encrypted_address = encrypt_data($address);
-    $encrypted_age = encrypt_data((string)$age);
+
+    // Store age as plain integer (no encryption)
+    $plain_age = (int)$age;
 
     // Hash the password securely
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert new user into the database
     $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Address, Password) VALUES (?, ?, ?, ?, ?)");
-    $insert_query->bind_param("sssss", $username, $email, $encrypted_age, $encrypted_address, $hashed_password);
+    $insert_query->bind_param("sssss", $username, $email, $plain_age, $encrypted_address, $hashed_password);
 
     // Attempt to insert the data
     try {
@@ -118,14 +117,12 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
-
 <body>
     <div class="container">
         <div class="box form-box">
@@ -141,7 +138,7 @@ if (isset($_POST['submit'])) {
                 </div>
                 <div class="field input">
                     <label>Age</label>
-                    <input type="number" name="age" required>
+                    <input type="number" name="age" required min="1">
                 </div>
                 <div class="field input">
                     <label>Address</label>
@@ -161,5 +158,4 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 </body>
-
 </html>

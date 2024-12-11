@@ -298,6 +298,7 @@ if (isset($_POST['submit'])) {
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
+            <a href="dashboard.php">Dashboard</a>
             <a href="register.php">Logout</a>
         </nav>
         <div id="menu-btn" class="fas fa-bars">☰</div>
