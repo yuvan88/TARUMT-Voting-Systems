@@ -1,27 +1,41 @@
 <?php
+session_start();
 include("php/config.php");
+
+// Define encryption key and method
+define('ENCRYPTION_KEY', 'your-secret-key-here'); // Replace with a secure key
+define('ENCRYPTION_METHOD', 'AES-256-CBC');
+
+// Encryption and decryption functions
+function encrypt_data($data) {
+    $key = hash('sha256', ENCRYPTION_KEY);
+    $iv = substr(hash('sha256', 'iv-secret'), 0, 16);
+    return base64_encode(openssl_encrypt($data, ENCRYPTION_METHOD, $key, 0, $iv));
+}
+
+function decrypt_data($data) {
+    $key = hash('sha256', ENCRYPTION_KEY);
+    $iv = substr(hash('sha256', 'iv-secret'), 0, 16);
+    return openssl_decrypt(base64_decode($data), ENCRYPTION_METHOD, $key, 0, $iv);
+}
 
 if (isset($_POST['submit'])) {
     // Sanitize and validate inputs
     $username = trim(mysqli_real_escape_string($con, $_POST['username']));
     $email = trim(mysqli_real_escape_string($con, $_POST['email']));
-    $age = (int) $_POST['age']; // Cast age to an integer for safety
-    $address = mysqli_real_escape_string($con, $_POST['address']);  // Sanitize address input
+    $age = (int)$_POST['age'];
+    $address = mysqli_real_escape_string($con, $_POST['address']);
     $password = mysqli_real_escape_string($con, $_POST['password']);
 
     // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "<div class='message'>
-                  <p>Invalid email format. Please try again.</p>
-              </div>";
+        echo "<div class='message'><p>Invalid email format. Please try again.</p></div>";
         exit;
     }
 
-    // Validate age (make sure it's a positive integer)
+    // Validate age
     if ($age <= 0) {
-        echo "<div class='message'>
-                  <p>Age must be a positive number. Please try again.</p>
-              </div>";
+        echo "<div class='message'><p>Age must be a positive number. Please try again.</p></div>";
         exit;
     }
 
@@ -32,31 +46,44 @@ if (isset($_POST['submit'])) {
     $email_check_query->store_result();
 
     if ($email_check_query->num_rows > 0) {
-        echo "<div class='message'>
-                  <p>This email is already registered. Try another one!</p>
-              </div>";
+        echo "<div class='message'><p>This email is already registered. Try another one!</p></div>";
         $email_check_query->close();
         exit;
     }
     $email_check_query->close();
+
+    // Encrypt sensitive data
+    $encrypted_address = encrypt_data($address);
+    $encrypted_age = encrypt_data((string)$age);
 
     // Hash the password securely
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
     // Insert new user into the database
     $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Address, Password) VALUES (?, ?, ?, ?, ?)");
-    $insert_query->bind_param("ssiss", $username, $email, $age, $address, $hashed_password);
+    $insert_query->bind_param("sssss", $username, $email, $encrypted_age, $encrypted_address, $hashed_password);
 
+    // Attempt to insert the data
     try {
         if ($insert_query->execute()) {
+            // Log the registration attempt
+            $ip_address = $_SERVER['REMOTE_ADDR'];
+            $log_file = 'logs/registration.log';
+            file_put_contents($log_file, "Registration attempt by $username from IP: $ip_address at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
+
+            // Insert audit log
+            $log_query = $con->prepare("INSERT INTO audit_log (action, user_email, ip_address) VALUES (?, ?, ?)");
+            $action = "User Registration";
+            $log_query->bind_param("sss", $action, $email, $ip_address);
+            $log_query->execute();
+            $log_query->close();
+
             // Redirect to login page after successful registration
             header("Location: login.php");
             exit;
         }
     } catch (mysqli_sql_exception $e) {
-        echo "<div class='message'>
-                  <p>Registration failed due to an unexpected error: " . $e->getMessage() . "</p>
-              </div>";
+        echo "<div class='message'><p>Registration failed due to an unexpected error: " . $e->getMessage() . "</p></div>";
     }
 
     // Close the prepared statement
