@@ -1,35 +1,42 @@
 <?php
 session_start();
-include('php/config.php');  // Ensure this path is correct
+include('php/config.php'); // Ensure this path is correct
 
-// Initialize the message variable to store errors or success messages
+// Initialize message array for error or success
 $message = array();
 
+// Ensure the candidate is logged in
+if (!isset($_SESSION['id'])) {
+    $message[] = "You must be logged in as a candidate to schedule an appointment.";
+}
+
 if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
-    $volunteer_id = $_SESSION['id'];  // The volunteer's ID from session
+    $candidate_id = $_SESSION['id']; // Candidate's ID from session
+    $candidate_name = mysqli_real_escape_string($con, $_POST['name']); // Candidate's name from form input
+    $candidate_email = mysqli_real_escape_string($con, $_POST['email']); // Candidate's email from form input
     $appointment_date = mysqli_real_escape_string($con, $_POST['date']);
     $appointment_time = mysqli_real_escape_string($con, $_POST['time']);
 
-    // Check if the volunteer already has an appointment for the same date and time
-    $check_existing_query = "SELECT * FROM volunteer_appointments WHERE volunteer_id = ? AND appointment_date = ? AND appointment_time = ?";
+    // Check if the candidate already has an appointment for the same date and time
+    $check_existing_query = "SELECT * FROM candidate_appointments WHERE candidate_id = ? AND appointment_date = ? AND appointment_time = ?";
     $stmt_check_existing = mysqli_prepare($con, $check_existing_query);
 
     if ($stmt_check_existing) {
-        mysqli_stmt_bind_param($stmt_check_existing, "iss", $volunteer_id, $appointment_date, $appointment_time);
+        mysqli_stmt_bind_param($stmt_check_existing, "iss", $candidate_id, $appointment_date, $appointment_time);
         mysqli_stmt_execute($stmt_check_existing);
         $result_check_existing = mysqli_stmt_get_result($stmt_check_existing);
 
         if (mysqli_num_rows($result_check_existing) > 0) {
-            // Volunteer already has an appointment for the same date and time
+            // Candidate already has an appointment for the same date and time
             $message[] = "You already have an appointment at this time.";
         } else {
             // Proceed to schedule the new appointment
-            $insert_appointment_query = "INSERT INTO volunteer_appointments (volunteer_id, volunteer_name, volunteer_email, appointment_date, appointment_time) 
+            $insert_appointment_query = "INSERT INTO candidate_appointments (candidate_id, candidate_name, candidate_email, appointment_date, appointment_time) 
                                          VALUES (?, ?, ?, ?, ?)";
             $stmt_insert = mysqli_prepare($con, $insert_appointment_query);
 
             if ($stmt_insert) {
-                mysqli_stmt_bind_param($stmt_insert, "issss", $volunteer_id, $volunteer_name, $volunteer_email, $appointment_date, $appointment_time);
+                mysqli_stmt_bind_param($stmt_insert, "issss", $candidate_id, $candidate_name, $candidate_email, $appointment_date, $appointment_time);
                 if (mysqli_stmt_execute($stmt_insert)) {
                     $message[] = "Candidate appointment scheduled successfully!";
                 } else {
@@ -45,14 +52,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
         $message[] = "Error checking existing appointments. Please try again later.";
     }
 }
-
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TARUMT Voting System</title>
+    <title>Candidate Appointment</title>
 
     <!-- font awesome cdn link  -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
@@ -158,11 +167,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             display: block;
         }
     }
+
 </style>
 
 <body>
-
-    <!-- header section starts  -->
     <header class="header">
         <a href="#" class="logo">
             <img src="image/tarumt.png" alt="TARUMT Logo">
@@ -173,17 +181,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
             <a href="appointment.php">Appointment</a>
-            <a href="voter.php">Voter</a>
-            <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
             <a href="register.php">Logout</a>
         </nav>
-        <div id="menu-btn" class="fas fa-bars">☰</div>
     </header>
-    <!-- header section ends -->
 
-    <!-- Appointment Form -->
-    <section class="appointment" id="appointment">
+     <!-- Appointment Form -->
+     <section class="appointment" id="appointment">
         <h1 class="heading"> <span>Candidate Appointment</span> </h1>
         <div class="row">
             <div class="image">
@@ -204,6 +208,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
                     ?>
                 </div>
 
+                <!-- Name input field for volunteer -->
+                <input type="text" name="name" placeholder="Your name" class="box" required>
+
+                <!-- Volunteer email input field -->
+                <input type="email" name="email" placeholder="Your email" class="box" required>
+
                 <!-- Time input field with min and max values set -->
                 <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
 
@@ -214,41 +224,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             </form>
         </div>
     </section>
-    <!-- Appointment Section Ends -->
 
     <script>
-        // Disable past dates in the date input field
         document.addEventListener('DOMContentLoaded', function () {
             var dateInput = document.getElementById('dateInput');
             var today = new Date();
-
-            // Format the date to YYYY-MM-DD
             var dd = today.getDate();
-            var mm = today.getMonth() + 1; // Months are zero-based
+            var mm = today.getMonth() + 1;
             var yyyy = today.getFullYear();
-
-            // Add leading zero to day and month if necessary
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
-
-            // Today's date in YYYY-MM-DD format
             var todayFormatted = yyyy + '-' + mm + '-' + dd;
-
-            // Set the 'min' attribute of the date input to today's date
             dateInput.setAttribute('min', todayFormatted);
-        });
-
-        // JavaScript to ensure time selection is within the range
-        document.getElementById('time').addEventListener('input', function () {
-            const time = this.value;
-            const minTime = '08:00';
-            const maxTime = '17:00';
-
-            // If the selected time is outside the range, reset the value to the last valid time
-            if (time < minTime || time > maxTime) {
-                alert("Invalid time selection. Please choose a time between 08:00 and 17:00.");
-                this.value = '';  // Reset the time field
-            }
         });
     </script>
 </body>
