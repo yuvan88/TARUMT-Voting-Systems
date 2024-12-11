@@ -128,6 +128,7 @@ if ($eventId) {
                 <a href="event_management.php">Manage Event</a>
                 <a href="candidate_management.php">Manage Candidates</a>
                 <a href="staff_management.php">Manage Staff</a>
+                <a href="schedule_maintenance.php">Schedule Maintenance</a>
                 <a href="logout.php">Logout</a>
             </nav>
         </div>

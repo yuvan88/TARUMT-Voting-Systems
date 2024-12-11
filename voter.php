@@ -35,10 +35,24 @@ if (isset($_POST['submit_vote'])) {
     // Collect vote and booking time
     $president = mysqli_real_escape_string($conn, $_POST['president']);
     $booking_time = mysqli_real_escape_string($conn, $_POST['booking_time']);
-
+    $url = "http://192.168.1.33:8888/find_finger"; // Replace <raspberry_pi_ip> with the IP of your Raspberry Pi
+    $ch = curl_init($url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    $response = curl_exec($ch);
+    curl_close($ch);
+    if (strpos($response, 'Fingerprint found') !== false) {
+        // Fingerprint matched
+        echo '<p class="message">Fingerprint matched. Proceed with your vote.</p>';
+        // Allow the voting process to continue
+    } else {
+        // Fingerprint not matched
+        echo '<p class="error-message">Fingerprint not matched. Please try again.</p>';
+        exit();
+    }
     // Insert the vote into the database
     $insert = mysqli_query($conn, "INSERT INTO votes (user_id, president, booking_time) 
         VALUES('$user_id', '$president', '$booking_time')");
+
 
     // Check if the vote was successfully inserted
     if ($insert) {
@@ -255,7 +269,6 @@ if (isset($_POST['submit_vote'])) {
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
-            <a href="dashboard.php">Dashboard</a>
             <a href="register.php">Logout</a>
         </nav>
     </header>
