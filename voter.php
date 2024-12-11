@@ -247,7 +247,7 @@ if (isset($_POST['submit_vote'])) {
             <img src="image/tarumt.png" alt="TARUMT Logo">
         </a>
         <nav class="navbar">
-            <a href="#home">Home</a>
+            <a href="index.php">Home</a>
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>

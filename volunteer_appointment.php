@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
     $volunteer_email = mysqli_real_escape_string($con, $_POST['email']);  // Get volunteer's email from form input
     $appointment_date = mysqli_real_escape_string($con, $_POST['date']);
     $appointment_time = mysqli_real_escape_string($con, $_POST['time']);
+    $volunteer_task = mysqli_real_escape_string($con, $_POST['task']);  // New task input
 
     // Check if the volunteer already has an appointment for the same date and time
     $check_existing_query = "SELECT * FROM volunteer_appointments WHERE volunteer_id = ? AND appointment_date = ? AND appointment_time = ?";
@@ -31,12 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             $message[] = "You already have an appointment at this time.";
         } else {
             // Proceed to schedule the new appointment
-            $insert_appointment_query = "INSERT INTO volunteer_appointments (volunteer_id, volunteer_name, volunteer_email, appointment_date, appointment_time) 
-                                         VALUES (?, ?, ?, ?, ?)";
+            $insert_appointment_query = "INSERT INTO volunteer_appointments (volunteer_id, volunteer_name, volunteer_email, appointment_date, appointment_time, volunteer_task) 
+                                         VALUES (?, ?, ?, ?, ?, ?)";
             $stmt_insert = mysqli_prepare($con, $insert_appointment_query);
 
             if ($stmt_insert) {
-                mysqli_stmt_bind_param($stmt_insert, "issss", $volunteer_id, $volunteer_name, $volunteer_email, $appointment_date, $appointment_time);
+                mysqli_stmt_bind_param($stmt_insert, "isssss", $volunteer_id, $volunteer_name, $volunteer_email, $appointment_date, $appointment_time, $volunteer_task);
                 if (mysqli_stmt_execute($stmt_insert)) {
                     $message[] = "Volunteer appointment scheduled successfully!";
                 } else {
@@ -89,7 +90,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
         justify-content: space-between;
         align-items: center;
         background-color: lightblue;
-        /* Turquoise background */
         padding: 10px 20px;
         position: fixed;
         width: 100%;
@@ -104,28 +104,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
         height: auto;
     }
 
-    /* New button container styles */
-    /* New button container styles */
     .button-container {
         display: flex;
         justify-content: center;
-        /* Align buttons horizontally to the center */
         align-items: center;
-        /* Align buttons vertically to the middle */
         position: absolute;
-        /* Fixes position relative to the nearest positioned ancestor */
         top: 80%;
         left: 70%;
-        /* Horizontally centers the container */
         transform: translateX(-50%);
-        /* Adjusts for the actual width of the container */
         height: auto;
     }
 
-
     .button-container .btn {
         margin: 0 10px;
-        /* Space between buttons */
         padding: 10px 20px;
         color: black;
         text-decoration: none;
@@ -137,7 +128,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
 
     .button-container .btn:hover {
         background-color: #0056b3;
-        /* Darker blue when hovered */
     }
 
     /* Mobile Menu Button */
@@ -178,7 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <img src="image/tarumt.png" alt="TARUMT Logo">
         </a>
         <nav class="navbar">
-            <a href="#home">Home</a>
+            <a href="index.php">Home</a>
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
@@ -227,8 +217,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
                 <!-- Date input field with min value set to today -->
                 <input type="date" name="date" class="box" required id="dateInput">
 
+                <!-- New task selection dropdown -->
+                <select name="task" class="box" required>
+                    <option value="">Select Appointment Type</option>
+                    <option value="Assist Voters">Assist Voters</option>
+                    <option value="Provide Guidance">Provide Guidance</option>
+                    <option value="Maintain Orderly Conduct">Maintain Orderly Conduct</option>
+                </select>
+
                 <input type="submit" name="submit" value="Schedule Appointment" class="btn">
             </form>
+        </div>
+        <div class="button-container" style="text-align: center; margin-top: 20px;">
+            <a href="appointment.php" class="btn">Appointment</a> <!-- Button to page 1 -->
+            <a href="candidate_appointment.php" class="btn">Candidate</a> <!-- Button to page 2 -->
         </div>
     </section>
 
@@ -239,32 +241,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             var dateInput = document.getElementById('dateInput');
             var today = new Date();
 
-            // Format the date to YYYY-MM-DD
             var dd = today.getDate();
-            var mm = today.getMonth() + 1; // Months are zero-based
+            var mm = today.getMonth() + 1;
             var yyyy = today.getFullYear();
 
-            // Add leading zero to day and month if necessary
             if (dd < 10) dd = '0' + dd;
             if (mm < 10) mm = '0' + mm;
 
-            // Today's date in YYYY-MM-DD format
             var todayFormatted = yyyy + '-' + mm + '-' + dd;
 
-            // Set the 'min' attribute of the date input to today's date
             dateInput.setAttribute('min', todayFormatted);
         });
 
-        // JavaScript to ensure time selection is within the range
         document.getElementById('time').addEventListener('input', function () {
             const time = this.value;
             const minTime = '08:00';
             const maxTime = '17:00';
 
-            // If the selected time is outside the range, reset the value to the last valid time
             if (time < minTime || time > maxTime) {
                 alert("Invalid time selection. Please choose a time between 08:00 and 17:00.");
-                this.value = '';  // Reset the time field
+                this.value = '';
             }
         });
     </script>

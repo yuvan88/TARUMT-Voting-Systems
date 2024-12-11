@@ -16,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
     $candidate_email = mysqli_real_escape_string($con, $_POST['email']); // Candidate's email from form input
     $appointment_date = mysqli_real_escape_string($con, $_POST['date']);
     $appointment_time = mysqli_real_escape_string($con, $_POST['time']);
+    $appointment_type = mysqli_real_escape_string($con, $_POST['appointment_type']); // New input field for appointment type
 
     // Check if the candidate already has an appointment for the same date and time
     $check_existing_query = "SELECT * FROM candidate_appointments WHERE candidate_id = ? AND appointment_date = ? AND appointment_time = ?";
@@ -31,12 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             $message[] = "You already have an appointment at this time.";
         } else {
             // Proceed to schedule the new appointment
-            $insert_appointment_query = "INSERT INTO candidate_appointments (candidate_id, candidate_name, candidate_email, appointment_date, appointment_time) 
-                                         VALUES (?, ?, ?, ?, ?)";
+            $insert_appointment_query = "INSERT INTO candidate_appointments (candidate_id, candidate_name, candidate_email, appointment_date, appointment_time, appointment_type) 
+                                         VALUES (?, ?, ?, ?, ?, ?)";
             $stmt_insert = mysqli_prepare($con, $insert_appointment_query);
 
             if ($stmt_insert) {
-                mysqli_stmt_bind_param($stmt_insert, "issss", $candidate_id, $candidate_name, $candidate_email, $appointment_date, $appointment_time);
+                mysqli_stmt_bind_param($stmt_insert, "isssss", $candidate_id, $candidate_name, $candidate_email, $appointment_date, $appointment_time, $appointment_type);
                 if (mysqli_stmt_execute($stmt_insert)) {
                     $message[] = "Candidate appointment scheduled successfully!";
                 } else {
@@ -104,7 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
     }
 
     /* New button container styles */
-    /* New button container styles */
     .button-container {
         display: flex;
         justify-content: center;
@@ -121,10 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
         height: auto;
     }
 
-
     .button-container .btn {
         margin: 0 10px;
-        /* Space between buttons */
         padding: 10px 20px;
         color: black;
         text-decoration: none;
@@ -175,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <img src="image/tarumt.png" alt="TARUMT Logo">
         </a>
         <nav class="navbar">
-            <a href="#home">Home</a>
+            <a href="index.php">Home</a>
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
@@ -210,11 +208,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
                     ?>
                 </div>
 
-                <!-- Name input field for volunteer -->
+                <!-- Name input field for candidate -->
                 <input type="text" name="name" placeholder="Your name" class="box" required>
 
-                <!-- Volunteer email input field -->
+                <!-- Candidate email input field -->
                 <input type="email" name="email" placeholder="Your email" class="box" required>
+
+                <!-- Dropdown for selecting appointment type -->
+                <select name="appointment_type" class="box" required>
+                    <option value="">Select Appointment Type</option>
+                    <option value="schedule_meeting">Schedule Meeting</option>
+                    <option value="verify_credentials">Verify Credentials</option>
+                    <option value="manage_appointments">Manage Other Appointments</option>
+                </select>
 
                 <!-- Time input field with min and max values set -->
                 <input type="time" name="time" class="box" id="time" required min="08:00" max="17:00">
@@ -224,6 +230,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
 
                 <input type="submit" name="submit" value="Schedule Appointment" class="btn">
             </form>
+        </div>
+        <div class="button-container" style="text-align: center; margin-top: 20px;">
+            <a href="appointment.php" class="btn">Appointment</a> <!-- Button to page 1 -->
+            <a href="volunteer_appointment.php" class="btn">Volunteer</a> <!-- Button to page 2 -->
         </div>
     </section>
 
