@@ -21,42 +21,18 @@ function decrypt_data($data)
     return openssl_decrypt(base64_decode($data), ENCRYPTION_METHOD, $key, 0, $iv);
 }
 
-// Function to check file integrity
-function check_file_integrity($file_path, $expected_hash)
-{
-    if (!file_exists($file_path)) {
-        echo "File does not exist: " . $file_path;
-        return;
-    }
-
-    // Generate the hash of the file
-    $file_hash = hash_file('sha256', $file_path);
-
-    // Check if the hash matches the expected value
-    if ($file_hash === $expected_hash) {
-        echo "File integrity verified: " . basename($file_path);
-    } else {
-        echo "File integrity compromised: " . basename($file_path);
-    }
-}
-
 // Check if form is submitted
 if (isset($_POST['submit'])) {
     // Sanitize and validate inputs
     $username = trim(mysqli_real_escape_string($con, $_POST['username']));
     $email = trim(mysqli_real_escape_string($con, $_POST['email']));
-
-    // Validate and handle age input
     $age = isset($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 ? (int) $_POST['age'] : NULL;
+    $password = mysqli_real_escape_string($con, $_POST['password']);
 
-    // Validate age input more clearly
     if ($age === NULL) {
         echo "<div class='message'><p>Invalid age provided. Please enter a valid number greater than zero.</p></div>";
         exit;
     }
-
-    $address = mysqli_real_escape_string($con, $_POST['address']);
-    $password = mysqli_real_escape_string($con, $_POST['password']);
 
     // Validate email format
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -64,36 +40,34 @@ if (isset($_POST['submit'])) {
         exit;
     }
 
-    // Check if the email already exists in the database
-    $email_check_query = $con->prepare("SELECT Email FROM users WHERE Email = ?");
-    $email_check_query->bind_param("s", $email);
-    $email_check_query->execute();
-    $email_check_query->store_result();
+    // Check if the email already exists
+    $verify_query = $con->prepare("SELECT Email FROM users WHERE Email = ?");
+    $verify_query->bind_param("s", $email);
+    $verify_query->execute();
+    $verify_query->store_result();
 
-    if ($email_check_query->num_rows > 0) {
+    if ($verify_query->num_rows > 0) {
         echo "<div class='message'><p>This email is already registered. Try another one!</p></div>";
-        $email_check_query->close();
+        $verify_query->close();
         exit;
     }
-    $email_check_query->close();
+    $verify_query->close();
 
-    // Encrypt sensitive data
-    $encrypted_address = encrypt_data($address);
-
-    // Store age as plain integer (no encryption)
-    $plain_age = (int) $age;
+    // Encrypt sensitive data (if required)
+    $encrypted_age = encrypt_data($age);
 
     // Hash the password securely
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
 
-    // Insert new user into the database
-    $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Address, Password) VALUES (?, ?, ?, ?, ?)");
-    $insert_query->bind_param("sssss", $username, $email, $plain_age, $encrypted_address, $hashed_password);
+    // Insert into database
+    $insert_query = $con->prepare("INSERT INTO users (Username, Email, Age, Password, is_admin) VALUES (?, ?, ?, ?, 0)");
+    $insert_query->bind_param("ssss", $username, $email, $encrypted_age, $hashed_password);
 
-    // Attempt to insert the data
     try {
         if ($insert_query->execute()) {
-            // Log the registration attempt
+            $user_id = $con->insert_id; // Get the ID of the newly inserted user
+
+            // Log registration activity
             $ip_address = $_SERVER['REMOTE_ADDR'];
             $log_file = 'logs/registration.log';
             file_put_contents($log_file, "Registration attempt by $username from IP: $ip_address at " . date('Y-m-d H:i:s') . "\n", FILE_APPEND);
@@ -105,19 +79,17 @@ if (isset($_POST['submit'])) {
             $log_query->execute();
             $log_query->close();
 
-            // Redirect to login page after successful registration
-            header("Location: login.php");
+            // Redirect to enroll_finger.php with user ID
+            header("Location: enroll_finger.php?user_id=$user_id");
             exit;
         }
     } catch (mysqli_sql_exception $e) {
         echo "<div class='message'><p>Registration failed due to an unexpected error: " . $e->getMessage() . "</p></div>";
     }
 
-    // Close the prepared statement
     $insert_query->close();
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -146,15 +118,11 @@ if (isset($_POST['submit'])) {
                     <input type="number" name="age" required min="1">
                 </div>
                 <div class="field input">
-                    <label>Address</label>
-                    <input type="text" name="address" required>
-                </div>
-                <div class="field input">
                     <label>Password</label>
                     <input type="password" name="password" required>
                 </div>
                 <div class="field">
-                    <input type="submit" name="submit" value="Register" class="btn">
+                    <input type="submit" name="submit" value="Submit and Enroll Finger" class="btn">
                 </div>
                 <div class="links">
                     Already have an account? <a href="login.php">Login</a>
