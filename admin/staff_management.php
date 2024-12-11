@@ -2,9 +2,12 @@
 session_start();
 include 'db/connection.php';
 include 'header.php';
-// Fetch all admin records (Read)
+
+// Fetch all admin records securely
 $sql = "SELECT * FROM admins";
-$result = mysqli_query($conn, $sql);
+$stmt = mysqli_prepare($conn, $sql);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 ?>
 
 <!DOCTYPE html>
@@ -17,24 +20,24 @@ $result = mysqli_query($conn, $sql);
 </head>
 <body>
 
-        <header class="sticky-header">
-            <div class="header-container">
-                <h1 class="logo">Vote System</h1>
-                <nav>
-                    <a href="event_management.php">Manage event</a>
-                    <a href="candidate_management.php">Manage Candidates</a>
-                    <a href="staff_management.php">Manage Staff</a>
-                    <a href="dashboard.php">Dashboard</a>
-                    <a href="logout.php">Logout</a>
-                </nav>
-            </div>
-        </header>
+<header class="sticky-header">
+    <div class="header-container">
+        <h1 class="logo">Vote System</h1>
+        <nav>
+            <a href="event_management.php">Manage event</a>
+            <a href="candidate_management.php">Manage Candidates</a>
+            <a href="staff_management.php">Manage Staff</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="logout.php">Logout</a>
+        </nav>
+    </div>
+</header>
 
 <div class="container">
 
     <!-- Display Message -->
     <?php if (isset($_SESSION['message'])) {
-        echo "<div class='message'>{$_SESSION['message']}</div>";
+        echo "<div class='message'>" . htmlspecialchars($_SESSION['message'], ENT_QUOTES, 'UTF-8') . "</div>";
         unset($_SESSION['message']);
     } ?>
 
@@ -52,11 +55,11 @@ $result = mysqli_query($conn, $sql);
             <tbody>
             <?php while ($admin = mysqli_fetch_assoc($result)) { ?>
                 <tr>
-                    <td><?= $admin['username']; ?></td>
-                    <td><?= $admin['role']; ?></td>
+                    <td><?= htmlspecialchars($admin['username'], ENT_QUOTES, 'UTF-8'); ?></td>
+                    <td><?= htmlspecialchars($admin['role'], ENT_QUOTES, 'UTF-8'); ?></td>
                     <td>
-                        <a href="edit_admin.php?id=<?= $admin['id']; ?>" class="button">Edit</a>
-                        <a href="delete_admin.php?id=<?= $admin['id']; ?>" class="button" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
+                        <a href="edit_admin.php?id=<?= urlencode($admin['id']); ?>" class="button">Edit</a>
+                        <a href="delete_admin.php?id=<?= urlencode($admin['id']); ?>" class="button" onclick="return confirm('Are you sure you want to delete this admin?')">Delete</a>
                     </td>
                 </tr>
             <?php } ?>
@@ -132,45 +135,6 @@ body {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-/* Candidate Management Section */
-.candidate-management {
-    margin-top: 20px;
-}
-
-/* Form Styles */
-form {
-    margin-bottom: 20px;
-    display: flex;
-    flex-direction: column;
-}
-
-form input[type="text"], form input[type="file"] {
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-form label {
-    font-size: 14px;
-    margin-bottom: 5px;
-}
-
-form button[type="submit"] {
-    background-color: #87CEEB; /* Light Blue */
-    color: white;
-    border: none;
-    cursor: pointer;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    transition: background-color 0.3s ease;
-}
-
-form button[type="submit"]:hover {
-    background-color: #00BFFF; /* Slightly darker blue */
-}
-
 /* Table Styles */
 table {
     width: 100%;
@@ -192,9 +156,23 @@ th {
     color: #333;
 }
 
-td img {
-    max-width: 100px;
-    max-height: 100px;
-    object-fit: cover;
+/* Add Admin Button */
+.add-admin-btn {
+    margin-top: 20px;
+    text-align: right;
+}
+
+.add-admin-btn a {
+    background-color: #87CEEB; /* Light Blue */
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s ease;
+}
+
+.add-admin-btn a:hover {
+    background-color: #00BFFF; /* Slightly darker blue */
 }
 </style>

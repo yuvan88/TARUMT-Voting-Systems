@@ -3,6 +3,18 @@ session_start();
 include 'db/connection.php';
 include 'header.php';
 
+// AES encryption and decryption functions
+function encrypt($data, $key) {
+    $iv = openssl_random_pseudo_bytes(16);  // Generate an IV (Initialization Vector)
+    $ciphertext = openssl_encrypt($data, 'AES-256-CBC', $key, 0, $iv);
+    return base64_encode($ciphertext . '::' . $iv); // Encode ciphertext and IV together
+}
+
+function decrypt($data, $key) {
+    list($ciphertext, $iv) = explode('::', base64_decode($data), 2);
+    return openssl_decrypt($ciphertext, 'AES-256-CBC', $key, 0, $iv);
+}
+
 // Handle Add New Admin (Create)
 if (isset($_POST['add_admin'])) {
     $username = isset($_POST['username']) ? mysqli_real_escape_string($conn, $_POST['username']) : '';
@@ -11,8 +23,9 @@ if (isset($_POST['add_admin'])) {
 
     // Ensure all fields are provided
     if ($username && $password && $role) {
-        $hashed_password = password_hash($password, PASSWORD_DEFAULT);  // Hash the password
-        $sql = "INSERT INTO admins (username, password, role) VALUES ('$username', '$hashed_password', '$role')";
+        $key = 'your_secret_key';  // This key should be stored securely (not hardcoded in production)
+        $encrypted_password = encrypt($password, $key);  // Encrypt the password
+        $sql = "INSERT INTO admins (username, password, role) VALUES ('$username', '$encrypted_password', '$role')";
         if (mysqli_query($conn, $sql)) {
             $_SESSION['message'] = "Admin added successfully!";
             header('Location: staff_management.php');
@@ -37,17 +50,17 @@ if (isset($_POST['add_admin'])) {
 <body>
 
 <header class="sticky-header">
-            <div class="header-container">
-                <h1 class="logo">Vote System</h1>
-                <nav>
-                    <a href="event_management.php">Manage event</a>
-                    <a href="candidate_management.php">Manage Candidates</a>
-                    <a href="staff_management.php">Manage Staff</a>
-                    <a href="dashboard.php">Dashboard</a>
-                    <a href="logout.php">Logout</a>
-                </nav>
-            </div>
-        </header>
+    <div class="header-container">
+        <h1 class="logo">Vote System</h1>
+        <nav>
+            <a href="event_management.php">Manage event</a>
+            <a href="candidate_management.php">Manage Candidates</a>
+            <a href="staff_management.php">Manage Staff</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="logout.php">Logout</a>
+        </nav>
+    </div>
+</header>
 
 <div class="container">
 
@@ -65,7 +78,6 @@ if (isset($_POST['add_admin'])) {
         <label for="role">Role</label>
         <select name="role" id="role" required>
             <option value="Admin">Admin</option>
-
             <option value="User">User</option>
         </select>
 
@@ -80,7 +92,8 @@ if (isset($_POST['add_admin'])) {
 </body>
 </html>
 
-<style>/* Sticky Header Styles */
+<style>
+/* Sticky Header Styles */
 /* Responsive Design */
 @media (max-width: 768px) {
     .header-container {
@@ -223,5 +236,4 @@ form .submit-btn {
 form .submit-btn:hover {
     background-color: #1565c0;
 }
-
 </style>
