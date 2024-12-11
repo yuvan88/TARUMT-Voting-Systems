@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <img src="image/tarumt.png" alt="TARUMT Logo">
         </a>
         <nav class="navbar">
-            <a href="index.php">Home</a>
+            <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
@@ -186,6 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <a href="voter.php">Voter</a>
             <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
+            <a href="dashboard.php">Dashboard</a>
             <a href="register.php">Logout</a>
         </nav>
         <div id="menu-btn" class="fas fa-bars">☰</div>

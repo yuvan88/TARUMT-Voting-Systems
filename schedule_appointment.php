@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Insert data into the database
     $query = "INSERT INTO appointments (user_id, appointment_date, appointment_time, location) 
               VALUES ('$user_id', '$appointment_date', '$appointment_time', '$location')";
-    
+
     if (mysqli_query($conn, $query)) {
         echo "Appointment scheduled successfully!";
     } else {

@@ -7,20 +7,23 @@ define('ENCRYPTION_KEY', 'your-secret-key-here'); // Replace with a secure key
 define('ENCRYPTION_METHOD', 'AES-256-CBC');
 
 // Encryption and decryption functions
-function encrypt_data($data) {
+function encrypt_data($data)
+{
     $key = hash('sha256', ENCRYPTION_KEY);
     $iv = substr(hash('sha256', 'iv-secret'), 0, 16);
     return base64_encode(openssl_encrypt($data, ENCRYPTION_METHOD, $key, 0, $iv));
 }
 
-function decrypt_data($data) {
+function decrypt_data($data)
+{
     $key = hash('sha256', ENCRYPTION_KEY);
     $iv = substr(hash('sha256', 'iv-secret'), 0, 16);
     return openssl_decrypt(base64_decode($data), ENCRYPTION_METHOD, $key, 0, $iv);
 }
 
 // Function to check file integrity
-function check_file_integrity($file_path, $expected_hash) {
+function check_file_integrity($file_path, $expected_hash)
+{
     if (!file_exists($file_path)) {
         echo "File does not exist: " . $file_path;
         return;
@@ -44,7 +47,7 @@ if (isset($_POST['submit'])) {
     $email = trim(mysqli_real_escape_string($con, $_POST['email']));
 
     // Validate and handle age input
-    $age = isset($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 ? (int)$_POST['age'] : NULL;
+    $age = isset($_POST['age']) && is_numeric($_POST['age']) && $_POST['age'] > 0 ? (int) $_POST['age'] : NULL;
 
     // Validate age input more clearly
     if ($age === NULL) {
@@ -78,7 +81,7 @@ if (isset($_POST['submit'])) {
     $encrypted_address = encrypt_data($address);
 
     // Store age as plain integer (no encryption)
-    $plain_age = (int)$age;
+    $plain_age = (int) $age;
 
     // Hash the password securely
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -117,12 +120,14 @@ if (isset($_POST['submit'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
     <link rel="stylesheet" href="style/style.css">
 </head>
+
 <body>
     <div class="container">
         <div class="box form-box">
@@ -158,4 +163,5 @@ if (isset($_POST['submit'])) {
         </div>
     </div>
 </body>
+
 </html>

@@ -201,7 +201,7 @@ $result = $conn->query($sql);
     <?php
     if ($result->num_rows > 0) {
         echo "<table><tr><th>Status</th><th>Count</th></tr>";
-        while($row = $result->fetch_assoc()) {
+        while ($row = $result->fetch_assoc()) {
             echo "<tr><td>" . $row["status"] . "</td><td>" . $row["turnout"] . "</td></tr>";
         }
         echo "</table>";
@@ -222,7 +222,7 @@ $result = $conn->query($sql);
     <script src="js/script.js"></script>
     <script>
         // JavaScript for menu toggle on mobile
-        document.getElementById('menu-btn').addEventListener('click', function() {
+        document.getElementById('menu-btn').addEventListener('click', function () {
             document.querySelector('.navbar').classList.toggle('active');
         });
     </script>

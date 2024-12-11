@@ -167,7 +167,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             display: block;
         }
     }
-
 </style>
 
 <body>
@@ -176,18 +175,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_SESSION['id'])) {
             <img src="image/tarumt.png" alt="TARUMT Logo">
         </a>
         <nav class="navbar">
-            <a href="index.php">Home</a>
+            <a href="#home">Home</a>
             <a href="#about">About</a>
             <a href="#rule">Rule</a>
             <a href="#staff">Staff</a>
             <a href="appointment.php">Appointment</a>
+            <a href="voter.php">Voter</a>
+            <a href="#review">Review</a>
             <a href="#blogs">Blogs</a>
+            <a href="dashboard.php">Dashboard</a>
             <a href="register.php">Logout</a>
         </nav>
     </header>
 
-     <!-- Appointment Form -->
-     <section class="appointment" id="appointment">
+    <!-- Appointment Form -->
+    <section class="appointment" id="appointment">
         <h1 class="heading"> <span>Candidate Appointment</span> </h1>
         <div class="row">
             <div class="image">

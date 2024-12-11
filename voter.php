@@ -51,6 +51,7 @@ if (isset($_POST['submit_vote'])) {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -238,84 +239,87 @@ if (isset($_POST['submit_vote'])) {
         }
     </style>
 </head>
+
 <body>
 
-<header class="header">
-    <a href="#" class="logo">
-        <img src="image/tarumt.png" alt="TARUMT Logo">
-    </a>
-    <nav class="navbar">
-        <a href="index.php">Home</a>
-        <a href="#about">About</a>
-        <a href="#rule">Rule</a>
-        <a href="#staff">Staff</a>
-        <a href="appointment.php">Appointment</a>
-        <a href="voter.php">Voter</a>
-        <a href="#review">Review</a>
-        <a href="#blogs">Blogs</a>
-        <a href="register.php">Logout</a>
-    </nav>
-</header>
+    <header class="header">
+        <a href="#" class="logo">
+            <img src="image/tarumt.png" alt="TARUMT Logo">
+        </a>
+        <nav class="navbar">
+            <a href="#home">Home</a>
+            <a href="#about">About</a>
+            <a href="#rule">Rule</a>
+            <a href="#staff">Staff</a>
+            <a href="appointment.php">Appointment</a>
+            <a href="voter.php">Voter</a>
+            <a href="#review">Review</a>
+            <a href="#blogs">Blogs</a>
+            <a href="dashboard.php">Dashboard</a>
+            <a href="register.php">Logout</a>
+        </nav>
+    </header>
 
-<section class="vote-section">
-    <h3>Vote for the Malaysia Student President</h3>
+    <section class="vote-section">
+        <h3>Vote for the Malaysia Student President</h3>
 
-    <?php
-    if (isset($message)) {
-        foreach ($message as $msg) {
-            echo "<p class='message'>$msg</p>";
+        <?php
+        if (isset($message)) {
+            foreach ($message as $msg) {
+                echo "<p class='message'>$msg</p>";
+            }
         }
-    }
-    ?>
+        ?>
 
-    <form action="voter.php" method="POST">
-        <div class="vote-container">
-            <!-- President 1 -->
-            <div class="vote-card">
-                <img src="image/vote1.png" alt="President 1">
-                <h4>President 1</h4>
-                <p>Brief description about President 1's achievements.</p>
-                <label>
-                    <input type="radio" name="president" value="President 1" required> Select
-                </label>
+        <form action="voter.php" method="POST">
+            <div class="vote-container">
+                <!-- President 1 -->
+                <div class="vote-card">
+                    <img src="image/vote1.png" alt="President 1">
+                    <h4>President 1</h4>
+                    <p>Brief description about President 1's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 1" required> Select
+                    </label>
+                </div>
+
+                <!-- President 2 -->
+                <div class="vote-card">
+                    <img src="image/vote2.png" alt="President 2">
+                    <h4>President 2</h4>
+                    <p>Brief description about President 2's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 2" required> Select
+                    </label>
+                </div>
+
+                <!-- President 3 -->
+                <div class="vote-card">
+                    <img src="image/vote3.png" alt="President 3">
+                    <h4>President 3</h4>
+                    <p>Brief description about President 3's achievements.</p>
+                    <label>
+                        <input type="radio" name="president" value="President 3" required> Select
+                    </label>
+                </div>
             </div>
 
-            <!-- President 2 -->
-            <div class="vote-card">
-                <img src="image/vote2.png" alt="President 2">
-                <h4>President 2</h4>
-                <p>Brief description about President 2's achievements.</p>
-                <label>
-                    <input type="radio" name="president" value="President 2" required> Select
-                </label>
+            <div class="booking-time">
+                <h4>Select your Booking Time:</h4>
+                <select name="booking_time" required>
+                    <option value="">Select a time</option>
+                    <?php
+                    foreach ($bookings as $booking) {
+                        echo "<option value='{$booking['appointment_time']}'>Date: {$booking['appointment_date']} - Time: {$booking['appointment_time']}</option>";
+                    }
+                    ?>
+                </select>
             </div>
 
-            <!-- President 3 -->
-            <div class="vote-card">
-                <img src="image/vote3.png" alt="President 3">
-                <h4>President 3</h4>
-                <p>Brief description about President 3's achievements.</p>
-                <label>
-                    <input type="radio" name="president" value="President 3" required> Select
-                </label>
-            </div>
-        </div>
-
-        <div class="booking-time">
-            <h4>Select your Booking Time:</h4>
-            <select name="booking_time" required>
-                <option value="">Select a time</option>
-                <?php
-                foreach ($bookings as $booking) {
-                    echo "<option value='{$booking['appointment_time']}'>Date: {$booking['appointment_date']} - Time: {$booking['appointment_time']}</option>";
-                }
-                ?>
-            </select>
-        </div>
-
-        <button type="submit" name="submit_vote" class="btn">Cast Vote</button>
-    </form>
-</section>
+            <button type="submit" name="submit_vote" class="btn">Cast Vote</button>
+        </form>
+    </section>
 
 </body>
+
 </html>

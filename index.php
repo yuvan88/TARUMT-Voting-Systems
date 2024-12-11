@@ -578,7 +578,7 @@ if (isset($_POST['submit'])) {
     <!-- open hours section start -->
 
     <!-- Appointment Section -->
-.....................
+    .....................
     <!-- Appointment Section Ends -->
 
     <!-- review section starts  -->

@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TARUMT Voting System - Voting Results</title>
     <!-- External CSS link -->
-    <link rel="stylesheet" href="styles.css"> 
+    <link rel="stylesheet" href="styles.css">
     <style>
         /* Basic page styling */
         body {
@@ -86,7 +86,8 @@
             width: 80%;
             margin: 0 auto;
             padding: 20px;
-            margin-top: 80px; /* Added margin to avoid overlap with fixed header */
+            margin-top: 80px;
+            /* Added margin to avoid overlap with fixed header */
         }
 
         h2 {
@@ -102,7 +103,8 @@
             border-collapse: collapse;
             margin-top: 20px;
             background-color: white;
-            table-layout: fixed; /* Ensures all columns have a consistent width */
+            table-layout: fixed;
+            /* Ensures all columns have a consistent width */
         }
 
         table th,
@@ -110,13 +112,15 @@
             padding: 10px;
             text-align: left;
             border: 1px solid #ddd;
-            word-wrap: break-word; /* Prevents content from overflowing */
+            word-wrap: break-word;
+            /* Prevents content from overflowing */
         }
 
         table th {
             background-color: #4CAF50;
             color: white;
-            text-align: center; /* Centers header text */
+            text-align: center;
+            /* Centers header text */
         }
 
         table tr:nth-child(even) {
@@ -128,7 +132,8 @@
         }
 
         table td {
-            text-align: center; /* Center-aligns content in cells */
+            text-align: center;
+            /* Center-aligns content in cells */
         }
 
         .no-results {
@@ -220,7 +225,7 @@
 
         $conn->close();
         ?>
-        
+
         <!-- Buttons Below Table -->
         <div class="btn-container">
             <button class="btn" onclick="window.location.href='voter_appointments.php'">Voter Appointment</button>
