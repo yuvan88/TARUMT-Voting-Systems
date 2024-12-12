@@ -185,9 +185,12 @@ $conn->close();
 
 <!-- Buttons for Refresh, Export, Next, and Back -->
 <div class="button-container">
-    <!-- Next button (example link) -->
+    <!-- Dashboard button (example link) -->
     <button class="action-btn" onclick="location.href='dashboard.php'">Dashboard</button>
 
-    <!-- Back button (example link) -->
+    <!-- Voter Appointments button (example link) -->
     <button class="action-btn" onclick="location.href='voter_appointments.php'">Voter Appointments</button>
+
+    <!-- Generate Report button -->
+    <button class="action-btn" onclick="location.href='generate_report.php'">Generate Report</button>
 </div>
